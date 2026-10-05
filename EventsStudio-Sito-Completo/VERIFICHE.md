@@ -23,3 +23,9 @@ Inseriti 27 scatti selezionati da 33 originali unici, dopo esclusione delle copi
 ## Contatti e recensioni forniti dal cliente
 
 Inseriti Carmine Delle Donne, telefono/WhatsApp, email, due profili Instagram e posizione Maps. Mappa incorporata dalle coordinate del link fornito, caricata solo su richiesta e verificata nel browser. Cinque recensioni complete riportate dal materiale del cliente, senza dedurre stelle o date dai caratteri copiati. Esclusi testi troncati con «Altro». Restano da fornire indirizzo scritto, collegamento diretto per scrivere una recensione, policy e dati societari. Il form richiede ancora la propria configurazione di invio: l’indirizzo email da solo non attiva il backend. Build superata.
+
+## Correzioni mobile/tablet — 5 ottobre 2026
+
+Mappa Google immediatamente caricata, senza pulsante. Coordinate 40.6458356,15.7999959 dal collegamento del cliente. Menu completo da 768 px, hamburger sotto 768 px. Frecce decorative nascoste fino a 1366 px e sui dispositivi con puntatore touch. Video: muted/defaultMuted espliciti, playsinline WebKit, recupero su ended e pausa a fine video, ritorno alla scheda e gesto utente. Clic sul logo dalla homepage riavvia a zero senza ricaricare; dalle pagine interne ritorna alla homepage.
+
+Verifica browser a 390,768,820,1024,1366 px: menu corretto, nessuna freccia visibile e nessun overflow. Logo verificato da 18,5 secondi a zero, riproduzione attiva. Nessuna modifica alla compressione video. Safari/iOS fisici e modalità risparmio energetico da collaudare. Le modifiche sono locali: la versione Netlify richiede una nuova pubblicazione.

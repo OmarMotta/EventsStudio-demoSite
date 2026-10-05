@@ -44,3 +44,5 @@ dialog::backdrop { background: rgb(8 8 8 / 80%); }
 .reveal-content:focus-within { opacity: 1 !important; transform: none !important; }
 a[aria-current="page"] { color: var(--color-sand); }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+@media (max-width: 1366px), (pointer: coarse) { .decorative-arrow { display: none !important; } }

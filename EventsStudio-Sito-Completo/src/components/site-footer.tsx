@@ -26,7 +26,7 @@ export function SiteFooter() {
       <Reveal>
         <p className="mb-12 text-xs uppercase tracking-[.2em] text-sand md:mb-20 md:text-sm">04 / Contattaci</p>
         <h2 id="contact-heading" className="font-display text-[clamp(3.1rem,9vw,10rem)] leading-[1.02] tracking-[-.035em]">Raccontaci<br /><span className="text-sand">il tuo evento.</span></h2>
-        <div className="mb-14 mt-8 max-w-lg md:mb-20 md:mt-12"><p className="mb-5 text-base text-white/75">Referente: {content.contactPerson}</p><Link href="/contatti" className="mb-6 inline-flex min-h-12 items-center gap-6 border-b border-sand text-base hover:text-sand">Parliamone <span aria-hidden="true">↗</span></Link>
+        <div className="mb-14 mt-8 max-w-lg md:mb-20 md:mt-12"><p className="mb-5 text-base text-white/75">Referente: {content.contactPerson}</p><Link href="/contatti" className="mb-6 inline-flex min-h-12 items-center gap-6 border-b border-sand text-base hover:text-sand">Parliamone <span aria-hidden="true" className="decorative-arrow">↗︎</span></Link>
           {channels.every(channel => !channel.href) && <p className="text-sm leading-relaxed text-white/55">I recapiti ufficiali saranno disponibili qui. Puoi esplorare il modulo dedicato al tuo evento.</p>}
         </div>
       </Reveal>

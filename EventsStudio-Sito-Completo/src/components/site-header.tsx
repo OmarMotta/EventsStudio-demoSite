@@ -33,7 +33,7 @@ export function SiteHeader() {
   function navControl(item: NavigationItem, large = false, index = 0) {
     const classes = large
       ? "group flex min-h-14 w-full items-baseline gap-5 py-1 text-left transition-colors hover:text-sand focus-visible:text-sand"
-      : "nav-control inline-flex min-h-11 items-center py-3 text-[.875rem] font-medium uppercase tracking-[.12em] text-white/90 transition-colors hover:text-sand";
+      : "nav-control inline-flex min-h-11 items-center py-3 text-[.6875rem] lg:text-[.875rem] font-medium uppercase tracking-[.04em] lg:tracking-[.12em] text-white/90 transition-colors hover:text-sand";
     const content = large ? <>
       <span aria-hidden="true" className="w-5 shrink-0 font-sans text-xs tracking-normal text-sand">0{index + 1}</span>
       <span className="font-display text-[clamp(2.25rem,6vw,5.5rem)] leading-[1.1]">{item.label}</span>
@@ -46,14 +46,14 @@ export function SiteHeader() {
   return <>
     <header className="absolute inset-x-0 top-0 z-20 px-6 pt-[max(1.5rem,env(safe-area-inset-top))] md:px-10 md:pt-8 xl:px-16">
       <div className="relative mx-auto flex min-h-16 max-w-480 items-center justify-center">
-        <nav aria-label="Lo studio" className="absolute left-0 hidden items-center gap-6 xl:flex 2xl:gap-9">
+        <nav aria-label="Lo studio" className="absolute left-0 hidden items-center gap-3 md:flex lg:gap-6 2xl:gap-9">
           {navigation.slice(0, 3).map(item => <div key={item.href}>{navControl(item)}</div>)}
         </nav>
         <BrandMark />
-        <nav aria-label="I nostri mondi" className="absolute right-0 hidden items-center gap-6 xl:flex 2xl:gap-9">
+        <nav aria-label="I nostri mondi" className="absolute right-0 hidden items-center gap-3 md:flex lg:gap-6 2xl:gap-9">
           {navigation.slice(3).map(item => <div key={item.href}>{navControl(item)}</div>)}
         </nav>
-        <button type="button" onClick={() => openMenu()} aria-label="Apri menu" aria-expanded={open} aria-controls="site-navigation" className="absolute right-0 flex size-12 flex-col items-center justify-center gap-1.5 xl:hidden">
+        <button type="button" onClick={() => openMenu()} aria-label="Apri menu" aria-expanded={open} aria-controls="site-navigation" className="absolute right-0 flex size-12 flex-col items-center justify-center gap-1.5 md:hidden">
           <span aria-hidden="true" className="h-px w-6 bg-white" />
           <span aria-hidden="true" className="h-px w-6 bg-white" />
         </button>

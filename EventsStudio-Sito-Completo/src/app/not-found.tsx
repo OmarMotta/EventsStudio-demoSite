@@ -1,2 +1,0 @@
-import Link from 'next/link';
-export default function NotFound(){return <main className="flex min-h-dvh flex-col items-center justify-center gap-8 px-6 text-center"><p className="text-sm tracking-widest text-sand">EVENTS STUDIO / 404</p><h1 className="font-display text-5xl md:text-7xl">Questa pagina<br />non è in scena.</h1><Link href="/" className="border-b border-sand py-4 text-base hover:text-sand">Torna alla homepage <span aria-hidden="true" className="decorative-arrow">↗︎</span></Link></main>;}

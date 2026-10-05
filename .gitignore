@@ -6,3 +6,7 @@ out/
 *.tsbuildinfo
 .sites-runtime/
 qa/
+
+# Archivi e copie di lavoro locali
+/EventsStudio-*/
+*.zip

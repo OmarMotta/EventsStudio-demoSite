@@ -15,6 +15,8 @@ export function SiteFooter() {
   const socials = [
     { label: "Instagram — Events Studio", href: httpsUrl(content.instagram) },
     { label: "Instagram — Events Studio Wedding", href: httpsUrl(content.instagramWedding) },
+    { label: "Facebook — Events Studio", href: httpsUrl(content.facebook) },
+    { label: "Matrimonio.com — Events Studio Wedding", href: httpsUrl(content.matrimonio) },
   ];
   const policies = [
     { label: "Privacy policy", href: policyUrl(content.privacyUrl) },
@@ -38,7 +40,7 @@ export function SiteFooter() {
             {channel.href ? <a href={channel.href} target={channel.external ? "_blank" : undefined} rel={channel.external ? "noopener noreferrer" : undefined} className="inline-flex min-h-11 items-center break-all text-lg leading-relaxed text-white transition-colors hover:text-sand md:text-xl">{channel.value ?? "Apri Google Maps"}</a> : <p className="text-base text-white/55">{channel.value ?? "Da fornire"}</p>}
           </div>)}
         </div>
-        <div className="flex flex-col gap-7 border-b border-white/15 py-9 md:flex-row md:gap-16 md:py-12">
+        <div className="flex flex-col gap-7 border-b border-white/15 py-9 md:flex-row md:flex-wrap md:gap-x-12 md:gap-y-5 md:py-12">
           {socials.map(social => <div key={social.label} className="min-w-0">
             {social.href ? <a href={social.href} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center text-sm text-white transition-colors hover:text-sand">{social.label}</a> : <><p className="text-sm leading-relaxed text-white/65">{social.label}</p><p className="mt-2 text-xs text-white/55">Profilo ufficiale da fornire</p></>}
           </div>)}

@@ -1,3 +1,4 @@
+import { newPhotos } from "./new-photos";
 import { photos } from "./photo-assets";
 import type { GalleryImage } from './gallery';
 
@@ -53,3 +54,24 @@ services.find(item => item.slug === 'allestimenti-effetti')!.visual = photos.p26
 pageVisuals.party = photos.p25;
 pageVisuals.events = photos.p8;
 pageVisuals['chi-siamo'] = photos.p24;
+
+// Photographs supplied on 7 October 2026.
+wedding.images.push(newPhotos.weddingCake);
+const townSquare = collections.find(item => item.slug === 'feste-di-piazza')!;
+townSquare.cover = newPhotos.townSquare;
+townSquare.images = [newPhotos.townSquare];
+const corporate = collections.find(item => item.slug === 'eventi-aziendali')!;
+corporate.cover = newPhotos.corporateScreen;
+corporate.images = [newPhotos.corporateScreen];
+services.find(item => item.slug === 'live-band')!.visual = newPhotos.liveBand;
+services.find(item => item.slug === 'animatore')!.visual = newPhotos.hostPortrait;
+
+privateParties.cover = newPhotos.partyDanceOne;
+pageVisuals.party = newPhotos.partyDanceTwo;
+privateParties.images = [newPhotos.partyDanceOne, newPhotos.partyDanceTwo, ...privateParties.images];
+
+// Foto Diciottesimi fornita dal cliente.
+const eighteenth = collections.find(item => item.slug === "diciottesimi")!;
+const eighteenthPhoto: GalleryImage = {"id": "diciottesimi-fontane", "title": "Una serata da ricordare", "alt": "La festeggiata tra fontane luminose durante il diciottesimo", "src": "/assets/images/party/diciottesimi/festeggiata-fontane.png", "width": 1440, "height": 960, "position": "50% 50%", "layout": "opening"};
+eighteenth.cover = eighteenthPhoto;
+eighteenth.images = [eighteenthPhoto, ...eighteenth.images.filter(image => image.src)];

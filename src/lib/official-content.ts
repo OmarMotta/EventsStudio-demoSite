@@ -50,12 +50,12 @@ export const officialContent = {
   email: "events_studiopz@hotmail.com" as string | null,
   instagram: "https://www.instagram.com/events_studio_/" as string | null,
   instagramWedding: "https://www.instagram.com/events_studio_wedding/" as string | null,
-  // <!-- [PLACEHOLDER: Indirizzo completo e verificato della sede] -->
-  address: null as string | null,
+  facebook: "https://www.facebook.com/eventstudiopotenza/" as string | null,
+  matrimonio: "https://www.matrimonio.com/musica-matrimonio/events-studio-wedding--e360460" as string | null,
+  address: "Via Angilla Vecchia, 6, 85100 Potenza PZ, Italia" as string | null,
   mapsUrl: "https://www.google.com/maps/place/Events+Studio/@40.6458396,15.797421,17z/data=!3m1!4b1!4m6!3m5!1s0x49edd57705ee34d9:0x7951493e04a1c2b3!8m2!3d40.6458356!4d15.7999959!16s%2Fg%2F11jykb8x9b" as string | null,
-  mapsEmbedUrl: "https://www.google.com/maps?q=40.6458356%2C15.7999959&z=17&output=embed" as string | null,
-  // <!-- [PLACEHOLDER: Ragione sociale e dati societari ufficiali] -->
-  companyDetails: null as string | null,
+  mapsEmbedUrl: "https://www.google.com/maps?cid=8741848882417353395&z=17&output=embed" as string | null,
+  companyDetails: "P.IVA: 02157470762\nVia Genova, 3 — 85100 Potenza (PZ) — IT\nTelefono: 338 5733403\nevents_studiopz@hotmail.com" as string | null,
   // <!-- [PLACEHOLDER: URL della privacy policy approvata] -->
   privacyUrl: null as string | null,
   // <!-- [PLACEHOLDER: URL della cookie policy approvata] -->

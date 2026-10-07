@@ -38,10 +38,9 @@ export const newPhotos: Record<string, GalleryImage> = {
     "id": "townSquare",
     "title": "La piazza in festa",
     "alt": "Animatori e pubblico con le mani alzate durante una festa di piazza",
-    "src": "/assets/images/events/feste-di-piazza/townSquare-2400.webp",
-    "srcSet": "/assets/images/events/feste-di-piazza/townSquare-960.webp 960w, /assets/images/events/feste-di-piazza/townSquare-2400.webp 2400w",
-    "width": 2400,
-    "height": 1347,
+    "src": "/assets/images/events/feste-di-piazza/piazza-aggiornata.jpg",
+    "width": 1728,
+    "height": 970,
     "position": "50% 50%",
     "layout": "opening"
   },

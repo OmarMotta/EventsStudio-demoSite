@@ -69,12 +69,11 @@ export const newPhotos: Record<string, GalleryImage> = {
   "hostPortrait": {
     "id": "hostPortrait",
     "title": "Animatore",
-    "alt": "Ritratto dell’animatore in abito marrone",
-    "src": "/assets/images/services/animatore/hostPortrait-2400.webp",
-    "srcSet": "/assets/images/services/animatore/hostPortrait-960.webp 768w, /assets/images/services/animatore/hostPortrait-2400.webp 1179w",
-    "width": 1179,
-    "height": 1474,
+    "alt": "Animatore con microfono dietro la postazione musicale",
+    "src": "/assets/images/services/animatore/animatore-microfono-09-10.jpg",
+    "width": 2528,
+    "height": 1684,
     "position": "50% 50%",
-    "layout": "portrait-left"
+    "layout": "opening"
   }
 };

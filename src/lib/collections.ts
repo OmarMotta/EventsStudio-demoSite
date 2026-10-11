@@ -12,7 +12,7 @@ export const collections: Collection[] = [
   { slug: 'feste-private', title: 'Feste private', group: 'party', description: 'La tua occasione, il tuo modo di festeggiare.', cover: emptyVisual(), images: album() },
   { slug: 'diciottesimi', title: 'Diciottesimi', group: 'party', description: 'Un nuovo capitolo. Una serata da ricordare.', cover: emptyVisual(), images: album() },
   { slug: 'wedding', title: 'Wedding', group: 'events', description: 'La musica, i dettagli, le emozioni del vostro giorno.', cover: emptyVisual(), images: album() },
-  { slug: 'eventi-aziendali', title: 'Eventi aziendali', group: 'events', description: 'Convention, congressi e meeting. Uno spazio per incontrarsi e condividere.', cover: emptyVisual(), images: album() },
+  { slug: 'eventi-aziendali', title: 'Eventi aziendali', group: 'events', description: 'Convention, congressi, meeting e feste aziendali. Uno spazio per incontrarsi e condividere.', cover: emptyVisual(), images: album() },
   { slug: 'feste-di-piazza', title: 'Feste di piazza', group: 'events', description: 'Il palco, la musica, il pubblico. L’energia di un evento collettivo.', cover: emptyVisual(), images: album() },
   { slug: 'spettacoli', title: 'Spettacoli', group: 'events', description: 'Performance, effetti e intrattenimento prendono scena.', cover: emptyVisual(), images: album() },
 ];

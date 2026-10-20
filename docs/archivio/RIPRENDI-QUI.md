@@ -1,3 +1,5 @@
+> DOCUMENTO STORICO: descrive una fase precedente del progetto. Non usare queste indicazioni per configurare il sito attuale. Consultare il README nella radice e le guide in docs.
+
 # Ripresa lavoro — Events Studio
 
 Stato salvato il 1 ottobre 2026. L’utente chiede di riprendere domani mattina; nessuna automazione richiesta.

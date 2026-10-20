@@ -1,3 +1,5 @@
+> DOCUMENTO STORICO: descrive una fase precedente del progetto. Non usare queste indicazioni per configurare il sito attuale. Consultare il README nella radice e le guide in docs.
+
 # Contenuti ufficiali — Fase 4
 
 Il file `src/lib/official-content.ts` raccoglie i dati da completare. Cercare i marcatori `<!-- [PLACEHOLDER:`. Sostituire `null` solo con dati ufficiali, racchiusi tra virgolette.

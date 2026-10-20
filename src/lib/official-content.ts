@@ -57,8 +57,7 @@ export const officialContent = {
   mapsEmbedUrl: "https://www.google.com/maps?cid=8741848882417353395&z=17&output=embed" as string | null,
   companyDetails: "P.IVA: 02157470762\nVia Genova, 3 — 85100 Potenza (PZ) — IT\nTelefono: 338 5733403\nevents_studiopz@hotmail.com" as string | null,
   privacyUrl: '/privacy' as string | null,
-  // <!-- [PLACEHOLDER: URL della cookie policy approvata] -->
-  cookiesUrl: null as string | null,
+  cookiesUrl: '/cookie-policy' as string | null,
 };
 
 export function httpsUrl(value: string | null) {

@@ -1,3 +1,5 @@
+> DOCUMENTO STORICO: descrive una fase precedente del progetto. Non usare queste indicazioni per configurare il sito attuale. Consultare il README nella radice e le guide in docs.
+
 # Verifiche — sito multipagina
 
 - Build di produzione e TypeScript: superati.

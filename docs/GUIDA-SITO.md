@@ -40,6 +40,6 @@ Ogni pagina ha titolo, descrizione, H1 e Open Graph. Per attivare URL assoluti, 
 | 29–30 | Reveal e transizioni di ingresso leggere; navigazione Next Link senza ricaricamenti completi. Movimento ridotto rispettato. |
 | 31–35 | Asset organizzati, lazy loading, font locali, responsive, SEO e sitemap predisposti. |
 | 36–40 | Nessun dato ufficiale inventato; CTA verso contatti e portfolio reali. |
-| 41–44 | Build e verifiche documentate in VERIFICHE.md. La richiesta successiva ha autorizzato il completamento delle pagine in questa fase. |
+| 41–44 | Build e verifiche documentate in archivio/VERIFICHE.md. La richiesta successiva ha autorizzato il completamento delle pagine in questa fase. |
 
 Prima della pubblicazione servono ancora foto, testi ufficiali, recapiti, recensioni e link, posizione, policy, dati societari, dominio e configurazione dell’invio. Il completamento tecnico delle strutture non equivale a un sito ufficiale pronto al pubblico.

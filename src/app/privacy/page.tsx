@@ -13,6 +13,7 @@ export default function PrivacyPage() {
         <div>
           <p className="text-sm leading-relaxed text-white/60">Ultimo aggiornamento<br /><time dateTime={contactPrivacy.version} className="text-sand">{contactPrivacy.updated}</time></p>
           <Link href="/contatti" className="mt-6 inline-flex min-h-11 items-center text-sm text-sand underline underline-offset-4">Torna al modulo Contattaci</Link>
+          <Link href="/cookie-policy" className="mt-3 flex min-h-11 items-center text-sm text-sand underline underline-offset-4">Cookie policy</Link>
         </div>
         <div className="min-w-0 max-w-3xl space-y-10">
           {contactPrivacy.sections.map((section, index) => <section key={section.title} aria-labelledby={`privacy-section-${index}`}>

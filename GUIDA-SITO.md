@@ -19,15 +19,9 @@ Le copertine supportano anche `video`: MP4 web, silenzioso, con `src` come poste
 
 ## Invio del modulo
 
-È implementato un backend reale in `src/app/api/contact/route.ts`, con validazione lato server, limite di dimensione, controllo dell’origine e campo antispam. Non salva dati personali nei file del sito e non simula invii riusciti.
+Il modulo usa Netlify Forms, con validazione condivisa frontend/backend, firma interna e protezioni distribuite tramite servizi nativi Netlify. La pagina `/privacy` descrive il trattamento delle richieste.
 
-1. Inserire la privacy approvata in `officialContent.privacyUrl`.
-2. Copiare `.env.example` in `.env.local`.
-3. Impostare `CONTACT_WEBHOOK_URL` sull’endpoint HTTPS autorizzato del proprio servizio di ricezione (CRM, automazione o backend email).
-4. Se richiesto, impostare `CONTACT_WEBHOOK_TOKEN`: viene usato solo lato server come Bearer token.
-5. Riavviare e provare l’invio con dati di test concordati con il responsabile del servizio.
-
-Il ricevitore accetta POST JSON con nome, cognome, telefono, email, tipologia, data, location, messaggio, privacy, privacyUrl, receivedAt e source. Deve rispondere 2xx soltanto dopo la presa in carico durevole della richiesta. Un errore o timeout produce un messaggio esplicito nel form. Configurare limiti di frequenza nel servizio o nel proxy di produzione; il campo antispam non sostituisce la protezione del ricevitore. Nessun endpoint è stato inventato o contattato durante i test: è stata usata una simulazione isolata.
+Leggere **GESTIONE-CONTATTI.md** per notifiche, lettura e risposta da mobile, conservazione e assistenza. Leggere **VERIFICHE-CONTATTI.md** per configurazione, architettura, test, limiti e checklist del deploy. Il vecchio webhook non è più utilizzato.
 
 ## SEO e pubblicazione
 

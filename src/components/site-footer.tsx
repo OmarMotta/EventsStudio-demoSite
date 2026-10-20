@@ -50,7 +50,7 @@ export function SiteFooter() {
             <p className="mb-3 text-white">EVENTS STUDIO</p>
             {content.companyDetails ? <p className="whitespace-pre-line">{content.companyDetails}</p> : <p>Dati societari da fornire.</p>}
             <div className="mt-5 flex flex-wrap gap-x-8 gap-y-4">
-              {policies.map(policy => policy.href ? <a key={policy.label} href={policy.href} className="inline-flex min-h-11 items-center text-xs underline underline-offset-4 hover:text-sand">{policy.label}</a> : <p key={policy.label} className="text-xs leading-relaxed">{policy.label}<span className="mt-1 block text-white/55">Testo ufficiale da fornire</span></p>)}
+              {policies.map(policy => policy.href ? <a key={policy.label} href={policy.href} className="inline-flex min-h-11 items-center text-xs underline underline-offset-4 hover:text-sand">{policy.label}</a> : null)}
             </div>
           </div>
           <BrandMark />

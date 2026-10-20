@@ -56,8 +56,7 @@ export const officialContent = {
   mapsUrl: "https://www.google.com/maps/place/Events+Studio/@40.6458396,15.797421,17z/data=!3m1!4b1!4m6!3m5!1s0x49edd57705ee34d9:0x7951493e04a1c2b3!8m2!3d40.6458356!4d15.7999959!16s%2Fg%2F11jykb8x9b" as string | null,
   mapsEmbedUrl: "https://www.google.com/maps?cid=8741848882417353395&z=17&output=embed" as string | null,
   companyDetails: "P.IVA: 02157470762\nVia Genova, 3 — 85100 Potenza (PZ) — IT\nTelefono: 338 5733403\nevents_studiopz@hotmail.com" as string | null,
-  // <!-- [PLACEHOLDER: URL della privacy policy approvata] -->
-  privacyUrl: null as string | null,
+  privacyUrl: '/privacy' as string | null,
   // <!-- [PLACEHOLDER: URL della cookie policy approvata] -->
   cookiesUrl: null as string | null,
 };

@@ -1,0 +1,16 @@
+[build]
+  command = "pnpm build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Next.js viene gestito dall'adattatore OpenNext automatico di Netlify.
+# Le variabili del modulo, se necessarie, vanno impostate nel pannello Netlify
+# anche per lo scope Functions; non inserire qui credenziali o token.
+
+[[headers]]
+  for = "/__forms.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store"

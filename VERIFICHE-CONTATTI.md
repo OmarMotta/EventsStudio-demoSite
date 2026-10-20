@@ -93,3 +93,12 @@ Non è implementata un’email automatica al visitatore: l’attuale flusso conc
 Il comando `pnpm test:production` registra una richiesta reale e controlla l’esito dell’API e del retry identico. È escluso da `pnpm test`. Richiede `CONTACT_E2E_BASE_URL` con l’origine HTTPS e `CONTACT_E2E_EMAIL` con una casella raggiungibile e autorizzata. Non legge la posta del cliente: la presenza in Forms e la ricezione della notifica vanno riscontrate separatamente.
 
 Nel browser locale sono stati verificati campi obbligatori, focus sul primo errore, selezione evento, checkbox privacy e mantenimento dei dati dopo la risposta 503 prevista fuori da Netlify. Il controllo visivo è stato eseguito nelle viewport stretta e desktop del browser integrato, con layout rispettivamente a una e due colonne; i dispositivi fisici restano nella checklist del collaudo.
+
+## Stato della consegna — 20 ottobre 2026
+
+- Implementazione inviata al ramo `main` di GitHub con commit `c9ceada`.
+- Verificati nel pannello Netlify: rilevamento Forms attivo e notifica salvata verso `events_studiopz@hotmail.com` per qualsiasi nuovo modulo.
+- Il pannello del team segnala l’uso dei soli **operational credits**: i siti già pubblicati restano online, ma i deploy di produzione sono sospesi fino al successivo ciclo di fatturazione o a un cambio di piano.
+- La nuova pagina `/privacy` sul dominio pubblico risponde ancora 404: l’aggiornamento non è pubblicato. Non sono stati dichiarati invii reali, registrazioni reali o ricezioni email verificate.
+- Non sono stati acquistati crediti, cambiati piani o accettati nuovi impegni economici. La scelta compete al proprietario dell’account.
+- Dopo lo sblocco: pubblicare il commit aggiornato, verificare la build e completare la checklist di collaudo e il test di produzione. Non inviare dati reali prima che il nuovo modulo e l’informativa siano effettivamente disponibili.

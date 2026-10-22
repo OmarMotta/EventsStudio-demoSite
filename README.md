@@ -17,13 +17,15 @@ Il sito pubblico esiste già, ma le nuove funzionalità non sono ancora verifica
 - `docs/`: istruzioni, policy e resoconti delle verifiche.
 - `docs/archivio/`: appunti storici, conservati come riferimento e non come istruzioni attuali.
 - `qa/`: schermate delle verifiche locali, escluse da Git.
-- `netlify.toml`, `next.config.ts`, `tsconfig.json`, `postcss.config.mjs`, `package.json`, `pnpm-lock.yaml`, `next-env.d.ts`: configurazione necessaria.
+- `netlify.toml`, `next.config.ts`, `tsconfig.json`, `postcss.config.mjs`, `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `next-env.d.ts`: configurazione necessaria.
 - `.env.example`: esempio delle impostazioni; non inserire segreti nei file pubblici o in Git.
 - `AGENTS.md`, `CLAUDE.md`: istruzioni per gli assistenti di sviluppo.
 
 `node_modules/` contiene le dipendenze installate e `.next/` la compilazione locale. Sono rigenerabili ed esclusi da Git; vengono mantenuti per non interrompere l’anteprima e non richiedere una reinstallazione.
 
 ## Guide
+
+- [Sicurezza del sito e configurazioni degli account](docs/SICUREZZA-SITO.md)
 
 - [Modificare il sito](docs/GUIDA-SITO.md)
 - [Leggere e gestire i contatti, anche da mobile](docs/GESTIONE-CONTATTI.md)

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { eventTypes, validateInquiry, type FieldErrors, type Inquiry, type InquiryField } from '@/lib/contact';
 
-type Props = { enabled: boolean; privacyUrl: string | null; email: string | null; phone: string | null; initialEvent?: string; initialService?: string };
+type Props = { localPreview?: boolean; enabled: boolean; privacyUrl: string | null; email: string | null; phone: string | null; initialEvent?: string; initialService?: string };
 type Outcome = { kind: 'idle' | 'error' | 'success' | 'uncertain'; message: string; reference?: string };
 const textInputs = [
   { name: 'nome', label: 'Nome', auto: 'given-name', type: 'text', max: 200 },
@@ -12,7 +12,7 @@ const textInputs = [
   { name: 'email', label: 'Email', auto: 'email', type: 'email', max: 254 },
 ] as const;
 
-export function ContactForm({ enabled, privacyUrl, email, phone, initialEvent = '', initialService = '' }: Props) {
+export function ContactForm({ localPreview = false, enabled, privacyUrl, email, phone, initialEvent = '', initialService = '' }: Props) {
   const [outcome, setOutcome] = useState<Outcome>({ kind: 'idle', message: '' });
   const [errors, setErrors] = useState<FieldErrors>({});
   const [busy, setBusy] = useState(false);
@@ -59,6 +59,11 @@ export function ContactForm({ enabled, privacyUrl, email, phone, initialEvent = 
       });
       return;
     }
+    setErrors({});
+    if (localPreview) {
+      announce({ kind: 'idle', message: 'I dati sono validi. Per inviare la richiesta usa il sito pubblicato: questa anteprima locale non è collegata al servizio di ricezione.' });
+      return;
+    }
     if (!navigator.onLine) {
       announce({ kind: uncertain ? 'uncertain' : 'error', message: 'La connessione sembra assente. I dati restano nel modulo: riconnettiti prima di riprovare.' });
       return;
@@ -72,10 +77,13 @@ export function ContactForm({ enabled, privacyUrl, email, phone, initialEvent = 
     try {
       const response = await fetch('/api/contact', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
+        mode: 'same-origin', credentials: 'omit', redirect: 'error', cache: 'no-store', referrerPolicy: 'no-referrer',
         body: JSON.stringify(validation.data), signal: controller.signal,
       });
       const result = await response.json();
       if (response.ok && result.ok === true && typeof result.reference === 'string') {
+        form.reset();
+        payload.current = null;
         announce({ kind: 'success', message: 'Richiesta inviata. Grazie per averci raccontato il tuo evento: ti risponderemo ai recapiti indicati.', reference: result.reference });
       } else {
         if (result.fields) setErrors(result.fields);
@@ -98,6 +106,7 @@ export function ContactForm({ enabled, privacyUrl, email, phone, initialEvent = 
     <div className="grid gap-12 border-t border-white/20 pt-10 lg:grid-cols-[.7fr_1.3fr]">
       <div>
         <h2 id="form-title" className="font-display text-4xl leading-tight md:text-6xl">Contatti<span className="text-sand">.</span></h2>
+        {localPreview && <p role="note" className="mb-6 max-w-sm border-l border-sand pl-5 text-sm leading-relaxed text-white/70">Anteprima locale: puoi controllare i campi, ma l’invio e la registrazione delle richieste sono disponibili sul sito pubblicato.</p>}
         <p id="form-help" className="mt-6 max-w-sm text-base leading-relaxed text-white/60">Partiamo dalla tua idea. I campi contrassegnati con * sono obbligatori.</p>
         <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/60">Preferisci parlarne direttamente?</p>
         <div className="mt-2 flex flex-col items-start gap-1 text-sm text-sand">
@@ -154,7 +163,7 @@ export function ContactForm({ enabled, privacyUrl, email, phone, initialEvent = 
           {outcome.reference && <p className="mt-2 break-all text-xs leading-relaxed text-white/60">Riferimento: {outcome.reference}</p>}
         </div>
         <button type="submit" disabled={!enabled || busy || sent || Boolean(retryAt)} className="mt-6 min-h-14 border border-sand px-8 py-4 text-sm uppercase tracking-widest text-sand transition-colors hover:bg-sand hover:text-ink disabled:border-white/25 disabled:text-white/55 disabled:hover:bg-transparent">
-          {busy ? 'Invio in corso…' : sent ? 'Richiesta inviata' : retryAt ? 'Attendi prima di riprovare' : uncertain ? 'Verifica esito' : 'Invia richiesta'}
+          {busy ? 'Invio in corso…' : sent ? 'Richiesta inviata' : retryAt ? 'Attendi prima di riprovare' : uncertain ? 'Verifica esito' : localPreview ? 'Verifica i campi' : 'Invia richiesta'}
         </button>
         <noscript><p className="mt-5 text-sm leading-relaxed text-white/70">Per inviare il modulo attiva JavaScript oppure utilizza i recapiti email e telefono.</p></noscript>
       </form>

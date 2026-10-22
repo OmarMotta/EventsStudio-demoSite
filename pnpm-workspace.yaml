@@ -1,0 +1,3 @@
+# Security patch for the transitive PostCSS source-map parser.
+overrides:
+  source-map-js: ^1.2.2

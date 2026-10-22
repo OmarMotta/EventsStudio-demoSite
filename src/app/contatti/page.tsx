@@ -1,3 +1,4 @@
+import { headers } from 'next/headers';
 import { PageIntro, PageShell } from '@/components/interior';
 import { ContactForm } from '@/components/contact-form';
 import { LocationSection } from '@/components/location-section';
@@ -7,4 +8,4 @@ import { services } from '@/lib/collections';
 import { officialContent } from '@/lib/official-content';
 export const metadata=pageMetadata('Contatti','Racconta il tuo evento a Events Studio: richieste per Party, Events, Tourism e servizi.','/contatti');
 export const dynamic='force-dynamic';
-export default async function Page({searchParams}:{searchParams:Promise<Record<string,string|string[]|undefined>>}) {const query=await searchParams;const config=contactConfig();return <PageShell><PageIntro title="Contattaci" eyebrow="Events Studio / Contatti" description="Un’idea, una data, un luogo. Da qui inizia il tuo evento." /><ContactForm enabled={config.enabled} privacyUrl={config.privacy} email={officialContent.email} phone={officialContent.phone} initialEvent={typeof query.evento==='string'?query.evento:''} initialService={typeof query.servizio==='string'&&services.some(s=>s.title===query.servizio)?query.servizio:''} /><LocationSection /></PageShell>;}
+export default async function Page({searchParams}:{searchParams:Promise<Record<string,string|string[]|undefined>>}) {const query=await searchParams;const config=contactConfig();const host=(await headers()).get('host')??'';const localPreview=/^(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/i.test(host);return <PageShell><PageIntro title="Contattaci" eyebrow="Events Studio / Contatti" description="Un’idea, una data, un luogo. Da qui inizia il tuo evento." /><ContactForm localPreview={localPreview} enabled={config.enabled} privacyUrl={config.privacy} email={officialContent.email} phone={officialContent.phone} initialEvent={typeof query.evento==='string'?query.evento:''} initialService={typeof query.servizio==='string'&&services.some(s=>s.title===query.servizio)?query.servizio:''} /><LocationSection /></PageShell>;}

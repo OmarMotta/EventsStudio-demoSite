@@ -4,9 +4,11 @@ export type OfficialReview = {
   text: string;
   sourceUrl: string;
   dateLabel?: string;
+  sourceLabel?: string;
+  excerpt?: boolean;
 };
 
-// Testi completi trascritti dal materiale fornito dal cliente. Nessuna data relativa o valutazione dedotta dai simboli copiati.
+// Testi trascritti dal materiale del cliente; eventuali estratti da fonti pubbliche sono indicati e collegati. Nessuna valutazione inventata.
 export const officialReviews: OfficialReview[] = [
   {
     "id": "review-1",
@@ -16,9 +18,11 @@ export const officialReviews: OfficialReview[] = [
   },
   {
     "id": "review-2",
-    "author": "Valentina Lucia",
-    "text": "Ho scelto event studio per il mio 18 esimo e non me ne sono pentita. È stata una festa fantastica e mi sono divertita tantissimo. Grazie ancora",
-    "sourceUrl": "https://www.google.com/maps/place/Events+Studio/@40.6458396,15.797421,17z/data=!3m1!4b1!4m6!3m5!1s0x49edd57705ee34d9:0x7951493e04a1c2b3!8m2!3d40.6458356!4d15.7999959!16s%2Fg%2F11jykb8x9b"
+    "author": "Antonio",
+    "text": "Non potevamo desiderare di meglio per il nostro matrimonio! ❤️ È stato semplicemente perfetto sotto ogni punto di vista.",
+    "sourceUrl": "https://www.matrimonio.com/musica-matrimonio/events-studio-wedding--e360460/opinioni",
+    "sourceLabel": "Matrimonio.com",
+    "excerpt": true
   },
   {
     "id": "review-3",

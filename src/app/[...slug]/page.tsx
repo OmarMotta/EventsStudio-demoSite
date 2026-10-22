@@ -4,7 +4,7 @@ import { AboutPage, CategoryIndex, CollectionPage, ServicesPage, TourismPage } f
 import { pageMetadata } from '@/lib/seo';
 const pages: Record<string, { title: string; description: string }> = {
   'chi-siamo': { title: 'Chi siamo', description: 'Events Studio nasce per offrire un servizio completo per le esigenze organizzative e rendere ogni evento indimenticabile.' },
-  servizi: { title: 'Servizi', description: 'DJ, animazione, live band, musicisti, performer, show production, allestimenti ed effetti speciali per gli eventi.' },
+  servizi: { title: 'Servizi', description: 'DJ, animazione, live band, musicisti, performer, Show Production, hostess e accoglienza, allestimenti e scenografie personalizzate ed effetti speciali per gli eventi.' },
   party: { title: 'Party', description: 'Feste private e diciottesimi: esplora i due mondi Party di Events Studio.' },
   events: { title: 'Events', description: 'Wedding, eventi aziendali, feste di piazza e spettacoli: gli eventi di Events Studio.' },
   tourism: { title: 'Tourism', description: 'Il mondo Tourism di Events Studio. Presentazione, esperienze e destinazioni in preparazione.' },

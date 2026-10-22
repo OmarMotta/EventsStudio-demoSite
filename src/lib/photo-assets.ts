@@ -1,4 +1,4 @@
-// Fotografie originali fornite dal cliente. Derivati WebP senza ritocchi creativi.
+// Fotografie fornite dal cliente. p3 e p8: ritocchi locali richiesti il 22 ottobre 2026; originali conservati.
 export const photos = {
   "p0": {
     "id": "events-studio-00",
@@ -26,10 +26,10 @@ export const photos = {
     "id": "events-studio-03",
     "title": "Tutti in pista",
     "alt": "Gli invitati ballano insieme durante il ricevimento",
-    "src": "/assets/images/events/wedding/events-studio-03-2400.webp",
-    "srcSet": "/assets/images/events/wedding/events-studio-03-960.webp 960w, /assets/images/events/wedding/events-studio-03-2400.webp 2400w",
-    "width": 2400,
-    "height": 1600,
+    "src": "/assets/images/events/wedding/events-studio-03-ritocco-1536.webp",
+    "srcSet": "/assets/images/events/wedding/events-studio-03-ritocco-960.webp 960w, /assets/images/events/wedding/events-studio-03-ritocco-1536.webp 1536w",
+    "width": 1536,
+    "height": 1024,
     "position": "50% 50%",
     "layout": "opening"
   },
@@ -70,10 +70,10 @@ export const photos = {
     "id": "events-studio-08",
     "title": "Luce ed emozione",
     "alt": "Fontane luminose ai lati della pista durante il ballo degli sposi",
-    "src": "/assets/images/events/wedding/events-studio-08-2400.webp",
-    "srcSet": "/assets/images/events/wedding/events-studio-08-960.webp 960w, /assets/images/events/wedding/events-studio-08-2400.webp 2400w",
-    "width": 2400,
-    "height": 1600,
+    "src": "/assets/images/events/wedding/events-studio-08-ritocco-1536.webp",
+    "srcSet": "/assets/images/events/wedding/events-studio-08-ritocco-960.webp 960w, /assets/images/events/wedding/events-studio-08-ritocco-1536.webp 1536w",
+    "width": 1536,
+    "height": 1024,
     "position": "50% 50%",
     "layout": "opening"
   },

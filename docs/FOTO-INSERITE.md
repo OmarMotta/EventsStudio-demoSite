@@ -33,3 +33,11 @@ Le feste di cui non è riconoscibile l’età sono classificate come feste priva
 | IMG_9C875534C9ED-5.jpeg | events/wedding | Il vostro momento |
 | IMG_9C875534C9ED-9.jpeg | events/wedding | Una nuova storia |
 | federica -53.JPG | party/feste-private | Un ingresso speciale |
+## Ritocchi richiesti — 22 ottobre 2026
+
+Due fotografie sono state ritoccate con lo strumento ImageGen su richiesta del proprietario:
+
+- `p8`, Luce ed emozione: rimozione delle scatole di controllo e dei cavetti visibili accanto alle fontane luminose sul pavimento.
+- `p3`, Tutti in pista: rimozione delle bretelle/imbracatura della persona indicata, dietro al ragazzo con camicia bianca e accanto alla ragazza scalza.
+
+Derivati del risultato a 1536×1024 e 960×640 in WebP, con suffisso `ritocco`. Le versioni originali 2400/960 restano conservate; i riferimenti condivisi puntano ai nuovi file anche per le altre pagine che usano queste foto. La risoluzione nativa del risultato del ritocco è 1536×1024: non è stata aumentata artificialmente a 2400 pixel.

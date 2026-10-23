@@ -53,7 +53,7 @@ export function SiteFooter() {
               {policies.map(policy => policy.href ? <a key={policy.label} href={policy.href} className="inline-flex min-h-11 items-center text-xs underline underline-offset-4 hover:text-sand">{policy.label}</a> : null)}
             </div>
           </div>
-          <BrandMark />
+          <BrandMark backToTop />
         </div>
         <div className="flex items-center justify-between gap-6 border-t border-white/10 pt-5 text-xs text-white/55">
           <span>© Events Studio</span>

@@ -16,8 +16,8 @@ export const navigation: NavigationItem[] = [
 ];
 
 export const brand = {
-  // PNG originale trasparente fornito dal cliente; nessuna modifica ai pixel.
-  logo: "/assets/logo/events-studio.png",
+  // Tracciati originali del PDF del cliente, senza fondo e bordo esterno.
+  logo: "/assets/logo/events-studio.svg",
   // Sabbia dominante #DCB780 campionato dal PNG trasparente; token in globals.css.
   name: "Events Studio",
 };

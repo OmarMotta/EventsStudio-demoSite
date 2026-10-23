@@ -10,8 +10,7 @@ const baseMetadata: Metadata = {
   // <!-- [PLACEHOLDER: Dominio ufficiale per canonical, sitemap e URL Open Graph] -->
   robots: { index: false, follow: false },
   openGraph: { title: "Events Studio — Party, Events, Tourism", description: "Party. Events. Tourism.", locale: "it_IT", type: "website" },
-  // Marchio originale anche come icona del browser, senza alterare il PNG.
-  icons: { icon: { url: "/assets/logo/events-studio.png", type: "image/png" } },
+  icons: { icon: { url: "/assets/logo/events-studio.svg", type: "image/svg+xml" } },
 };
 export const metadata: Metadata = { ...baseMetadata, ...pageMetadata('Party, Events, Tourism', 'Events Studio: Party, Events, Tourism e servizi per eventi. Potenza, Basilicata.', '/') };
 

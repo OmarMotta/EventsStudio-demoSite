@@ -23,7 +23,7 @@ export const services = [
   { slug: 'animatore', title: 'Animatore', description: 'Coinvolgimento e conduzione, in dialogo con gli ospiti.', visual: emptyVisual() },
   { slug: 'live-band', title: 'Live band', description: 'L’energia della musica dal vivo, sul palco e tra le persone.', visual: emptyVisual() },
   { slug: 'musicisti-performer', title: 'Musicisti e performer', description: 'Suoni e performance per dare carattere a ogni momento.', visual: emptyVisual() },
-  { slug: 'show-production', title: 'Spettacoli e Show Production', description: 'Lo spettacolo come parte del racconto dell’evento.', visual: emptyVisual() },
+  { slug: 'show-production', title: 'Spettacoli, ballerine e Show Production', description: 'Lo spettacolo come parte del racconto dell’evento.', visual: emptyVisual() },
   { slug: 'allestimenti-effetti', title: 'Allestimenti personalizzati ed effetti speciali', description: 'Spazi, dettagli ed effetti pensati per la scena.', visual: emptyVisual() },
 ];
 

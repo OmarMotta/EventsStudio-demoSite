@@ -1,5 +1,13 @@
 # Sicurezza del sito e del modulo — 22 ottobre 2026
 
+## Limite di ingresso Netlify — 23 ottobre 2026
+
+`netlify/edge-functions/contact-rate-limit.ts` dichiara una regola nativa Netlify per `/api/contact*`: 20 chiamate ogni 60 secondi per coppia IP/dominio, su tutti i metodi. Le altre pagine e gli asset non sono interessati. La funzione lascia proseguire le richieste ammesse senza accessi a Blobs o chiamate esterne. La piattaforma applica il blocco 429 prima delle funzioni; resta separato il limite applicativo di 5 nuove richieste ogni 10 minuti.
+
+Il client riconosce anche le risposte 429 HTML/testo della piattaforma, mantiene i campi e attende Retry-After (massimo 10 minuti), oppure 60 secondi se assente. Un precedente esito incerto resta incerto.
+
+La regola va verificata nei log del deploy, fase post-processing: la sola pubblicazione riuscita non certifica che Netlify l'abbia acquisita. Non viene eseguito uno stress test in produzione. Il conteggio Netlify può richiedere fino a 10 secondi per applicare il blocco; IP condivisi condividono la quota e molti IP diversi possono aggirare il singolo limite. Non è un limite globale del traffico né una garanzia di consumo massimo. Fonte: https://docs.netlify.com/manage/security/secure-access-to-sites/rate-limiting/
+
 ## Errore riscontrato nell’anteprima locale
 
 `next start` fuori da Netlify non dispone del contesto Netlify Blobs e dell’indirizzo IP attendibile aggiunto dalla piattaforma. Il backend rifiuta gli invii con 503: non è una conferma di ricezione e non va aggirata aggiungendo credenziali al browser o simulando un successo.

@@ -82,6 +82,13 @@ export function ContactForm({ localPreview = false, enabled, privacyUrl, email, 
         mode: 'same-origin', credentials: 'omit', redirect: 'error', cache: 'no-store', referrerPolicy: 'strict-origin',
         body: JSON.stringify(validation.data), signal: controller.signal,
       });
+      // Netlify can return a platform HTML/text response before our JSON route.
+      if (response.status === 429) {
+        const delay = Number(response.headers.get('Retry-After'));
+        setRetryAt(Date.now() + (Number.isFinite(delay) && delay > 0 ? Math.min(delay, 600) : 60) * 1000);
+        announce({ kind: uncertain ? 'uncertain' : 'error', message: 'Hai effettuato diversi tentativi. Attendi almeno un minuto prima di riprovare. I dati restano nel modulo.' });
+        return;
+      }
       const result = await response.json();
       if (response.ok && result.ok === true && typeof result.reference === 'string') {
         form.reset();
@@ -89,10 +96,6 @@ export function ContactForm({ localPreview = false, enabled, privacyUrl, email, 
         announce({ kind: 'success', message: 'Richiesta inviata. Grazie per averci raccontato il tuo evento: ti risponderemo ai recapiti indicati.', reference: result.reference });
       } else {
         if (result.fields) setErrors(result.fields);
-        if (response.status === 429) {
-          const delay = Number(response.headers.get('Retry-After'));
-          setRetryAt(Date.now() + (Number.isFinite(delay) && delay > 0 ? Math.min(delay, 600) : 60) * 1000);
-        }
         announce({ kind: result.uncertain === true ? 'uncertain' : 'error', message: typeof result.error === 'string' ? result.error : 'L’invio non è riuscito. I dati restano nel modulo: riprova più tardi.', reference: result.reference });
       }
     } catch {

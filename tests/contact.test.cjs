@@ -83,6 +83,7 @@ test('backend: origine, formato, JSON malformato e dimensione reale dello stream
   const { post, calls } = setup();
   assert.equal((await post(request(valid, { origin: 'https://external.invalid' }))).status, 403);
   assert.equal((await post(request(valid, { 'sec-fetch-site': 'cross-site' }))).status, 403);
+  assert.equal((await post(request(valid, { origin: 'null' }))).status, 403);
   assert.equal((await post(request(valid, { 'content-type': 'application/json-malformed' }))).status, 415);
   assert.equal((await post(request({ ...valid, email: 'bad' }))).status, 400);
   assert.equal((await post(request({ ...valid, messaggio: 'a'.repeat(21000) }))).status, 413);

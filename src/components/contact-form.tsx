@@ -77,7 +77,9 @@ export function ContactForm({ localPreview = false, enabled, privacyUrl, email, 
     try {
       const response = await fetch('/api/contact', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        mode: 'same-origin', credentials: 'omit', redirect: 'error', cache: 'no-store', referrerPolicy: 'no-referrer',
+        // no-referrer + same-origin can serialize Origin as null on POST.
+        // Send only the origin, never the page path/query or form fields.
+        mode: 'same-origin', credentials: 'omit', redirect: 'error', cache: 'no-store', referrerPolicy: 'strict-origin',
         body: JSON.stringify(validation.data), signal: controller.signal,
       });
       const result = await response.json();

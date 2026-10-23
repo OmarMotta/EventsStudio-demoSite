@@ -13,7 +13,7 @@ La pagina Contattaci riconosce localhost/127.0.0.1/[::1] dall’Host e mostra un
 - Audit completo delle dipendenze di produzione e sviluppo: nessuna vulnerabilità nota segnalata al controllo del 22/10/2026. Non è una garanzia di assenza di vulnerabilità sconosciute.
 - Intestazioni in Next.js e Netlify: CSP, divieto di incorporare il sito in iframe, protezione MIME sniffing, nessun referrer, disabilitazione delle API camera/microfono/geolocalizzazione/pagamenti/USB, HSTS per HTTPS e disabilitazione del DNS prefetch.
 - CSP limita le connessioni del documento e gli invii al dominio del sito, consente iframe solo ai domini Google Maps previsti, blocca oggetti/plugin e gestori di eventi HTML inline; non permette `eval` in produzione.
-- Il browser invia il modulo solo alla stessa origine, senza cookie, senza cache e senza seguire redirect. Nessun token amministrativo o password email nel client.
+- Il browser invia il modulo solo alla stessa origine, senza cookie, senza cache e senza seguire redirect. Per questa singola richiesta la policy referrer è `strict-origin`: trasmette solo l’origine, senza percorso, query o campi, evitando che `same-origin` insieme a `no-referrer` produca `Origin: null`. La policy generale delle pagine resta `no-referrer`. Nessun token amministrativo o password email nel client.
 - Dopo una conferma positiva i campi vengono ripuliti e il riferimento alla richiesta nel componente viene eliminato. Non viene salvato il contenuto del modulo in localStorage/sessionStorage. L’autocompletamento del browser e la sicurezza del dispositivo dipendono anche dalle impostazioni dell’utente.
 
 ### Limite intenzionale della CSP
@@ -65,3 +65,10 @@ Nessuna garanzia di invulnerabilità assoluta, nessun penetration test indipende
 - Build Next.js 16.4.2 con Webpack superata, con controllo TypeScript.
 - Prova browser: campi vuoti evidenziati e focus al primo errore; dati sintetici validi riconosciuti localmente senza invio, con rimozione degli errori precedenti. Modulo lasciato vuoto dopo la prova.
 - Schermate in `qa/contatti-sicurezza-anteprima.png` e `qa/contatti-sicurezza-verifica-locale.png`.
+
+
+### Correzione dell’origine — 23 ottobre 2026
+
+Il controllo server continua a respingere origini assenti, `null` e siti esterni. È stata corretta la combinazione delle opzioni del fetch del client (`mode: same-origin` + `referrerPolicy: no-referrer`), che secondo Fetch può serializzare l’origine del POST come `null`. La richiesta del modulo usa ora `strict-origin`, mantenendo destinazione stessa origine, nessun cookie e nessun redirect. Il controllo delle sole richieste locali non dimostra la registrazione o l’arrivo dell’email su Netlify: questi esiti richiedono una verifica in produzione dopo il deploy.
+
+Riferimento: https://fetch.spec.whatwg.org/#append-a-request-origin-header

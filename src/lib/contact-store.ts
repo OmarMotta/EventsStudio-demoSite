@@ -11,7 +11,16 @@ const WINDOW_LIMIT = 5;
 type Receipt = { id: string; state: 'processing' | 'accepted' | 'uncertain'; createdAt: number };
 type Store = ReturnType<typeof getStore>;
 const hash = (value: string) => createHash('sha256').update(value).digest('hex');
-export const openContactStore = () => getStore({ name: CONTACT_STORE_NAME, consistency: 'strong' });
+export const openContactStore = () => getStore({
+  name: CONTACT_STORE_NAME, consistency: 'strong',
+  // Technical guards must bypass Next.js's persistent data cache.
+  fetch: async (input, init) => {
+    console.info('contact_storage_request', { method: init?.method });
+    const response = await fetch(input, { ...init, cache: 'no-store', signal: AbortSignal.timeout(8000) });
+    console.info('contact_storage_response', { status: response.status });
+    return response;
+  },
+});
 export const inquiryKey = (inquiry: Inquiry, privacyVersion: string) => `requests/${hash(JSON.stringify([privacyVersion, inquiry]))}`;
 
 export async function contactSigningKey(store: Store) {

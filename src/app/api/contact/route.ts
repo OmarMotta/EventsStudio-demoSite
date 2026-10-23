@@ -48,14 +48,17 @@ export async function POST(request: Request) {
   const ip = request.headers.get('x-nf-client-connection-ip') ?? '';
   if (!isIP(ip)) return unavailable();
   try {
+    console.info('contact_validation_complete');
     const store = openContactStore();
     const key = inquiryKey(result.data, `${config.origin}:${PRIVACY_VERSION}`);
     const existing = await readReceipt(store, key);
+    console.info('contact_receipt_checked');
     if (existing) return existing.state === 'accepted'
       ? json({ ok: true, reference: existing.id, duplicate: true }) : uncertain(existing.id);
     const rate = await allowContact(store, ip);
     if (!rate.allowed) return json({ error: 'Hai effettuato diversi tentativi. Attendi qualche minuto prima di riprovare.' }, 429, { 'Retry-After': String(rate.retryAfter) });
     const signingKey = await contactSigningKey(store);
+    console.info('contact_guards_ready');
     const receipt = await reserveReceipt(store, key);
     if (!receipt) {
       const concurrent = await readReceipt(store, key);
@@ -63,6 +66,7 @@ export async function POST(request: Request) {
       return concurrent ? uncertain(concurrent.id) : unavailable();
     }
     try {
+      console.info('contact_delivery_started');
       await deliverContact(config.origin, result.data, receipt.id, config.privacy, signingKey);
       await finishReceipt(store, key, receipt, 'accepted');
       return json({ ok: true, reference: receipt.id });

@@ -1,6 +1,6 @@
 export const cookiePolicy = {
-  version: '2026-10-20',
-  updated: '20 ottobre 2026',
+  version: '2026-10-29',
+  updated: '29 ottobre 2026',
   sections: [
     {
       title: 'Titolare e ambito',
@@ -30,11 +30,10 @@ export const cookiePolicy = {
       ],
     },
     {
-      title: 'Google Maps: caricamento automatico',
+      title: 'Foto della sede e indicazioni su Google Maps',
       paragraphs: [
-        'La pagina Contattaci incorpora la mappa della sede tramite Google Maps. La mappa viene caricata automaticamente all’apertura della pagina, senza attendere un’autorizzazione tramite banner del sito.',
-        'Il caricamento stabilisce una connessione con Google e può trasmettere informazioni tecniche, tra cui indirizzo IP e dati del browser. Google può utilizzare cookie e altri identificativi secondo il servizio erogato, le impostazioni del browser e le eventuali scelte del tuo account Google.',
-        'Google gestisce nomi, finalità e durata dei propri cookie. L’elenco generale e i relativi tempi sono consultabili nella documentazione del fornitore; non tutti i cookie Google sono necessariamente presenti in ogni visita o sessione della mappa. Non viene dichiarata l’assenza di cookie di terze parti.',
+        'La sezione Dove trovarci mostra una fotografia della sede servita dal sito. Non incorpora Google Maps e non carica automaticamente il servizio di mappe di Google.',
+        'Il collegamento alle indicazioni apre Google Maps solo quando lo selezioni. Da quel momento si applicano le condizioni e le scelte privacy del servizio esterno, che può trattare dati tecnici e utilizzare cookie secondo la propria informativa.',
       ],
       links: [
         { label: 'Google: tipi di cookie, finalità e durata', href: 'https://policies.google.com/technologies/cookies?hl=it', external: true },
@@ -51,8 +50,8 @@ export const cookiePolicy = {
     {
       title: 'Scelte del browser e servizi esterni',
       paragraphs: [
-        'Puoi controllare o cancellare cookie e dati dei siti nelle impostazioni del browser e, se disponibile, bloccare i cookie di terze parti. Queste impostazioni possono limitare il funzionamento della mappa. Il blocco dei cookie nel browser non impedisce necessariamente tutte le connessioni a Google o la trasmissione dei dati tecnici necessari a tali connessioni.',
-        'Nella configurazione attuale non è presente un comando del sito che blocchi preventivamente Google Maps. Questa informativa descrive il caricamento automatico e non costituisce una raccolta di consenso. Per eventuali cookie o tracciamenti non tecnici soggetti a consenso, la sola pubblicazione dell’informativa non sostituisce l’autorizzazione richiesta.',
+        'Puoi controllare o cancellare cookie e dati dei siti nelle impostazioni del browser e, se disponibile, bloccare i cookie di terze parti.',
+        'La fotografia della sede non richiede l’attivazione di Google Maps. Questa informativa non costituisce una raccolta di consenso; eventuali strumenti non tecnici soggetti a consenso devono essere gestiti prima della loro attivazione.',
         'I link a WhatsApp, Instagram, Facebook, Matrimonio.com e Google Maps aprono servizi esterni. I loro trattamenti sono regolati dalle rispettive informative; i semplici link non equivalgono a widget social incorporati nel sito.',
       ],
       links: [

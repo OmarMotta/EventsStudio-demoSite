@@ -1,7 +1,7 @@
 export const contactPrivacy = {
   title: 'Informativa privacy',
-  updated: '20 ottobre 2026',
-  version: '2026-10-20',
+  updated: '29 ottobre 2026',
+  version: '2026-10-29',
   sections: [
     {
       title: 'Titolare del trattamento',
@@ -66,7 +66,7 @@ export const contactPrivacy = {
       title: 'Filtri automatici e servizi esterni nella pagina',
       paragraphs: [
         'I filtri antispam possono bloccare richieste sospette. Non utilizziamo il modulo per profilazione o decisioni basate unicamente su trattamenti automatizzati con effetti giuridici o analogamente significativi. Se non riesci a inviare una richiesta puoi contattarci via email o telefono.',
-        'La pagina Contattaci incorpora una mappa Google Maps, che viene caricata con la pagina e può trasmettere a Google dati tecnici, come indirizzo IP e informazioni sul browser, secondo le condizioni del fornitore. I link a social network, WhatsApp e altri siti conducono a servizi esterni soggetti alle rispettive informative. Questa informativa non sostituisce le informative dei servizi esterni.',
+        'La sezione Dove trovarci mostra una fotografia della sede servita dal sito, senza incorporare Google Maps. Le indicazioni su Google Maps si aprono solo selezionando il relativo collegamento. I link a social network, WhatsApp e altri siti conducono a servizi esterni soggetti alle rispettive informative. Questa informativa non sostituisce le informative dei servizi esterni.',
       ],
       links: [{ label: 'Informativa privacy Google', href: 'https://policies.google.com/privacy?hl=it' }],
     },

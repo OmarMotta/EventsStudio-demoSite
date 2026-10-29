@@ -1,5 +1,5 @@
 import { officialContent, httpsUrl } from "@/lib/official-content";
-import { LocationMap } from "./location-map";
+import { LocationCard } from "./location-card";
 import { OfficialLink } from "./official-link";
 import { Reveal } from "./reveal";
 
@@ -15,7 +15,7 @@ export function LocationSection() {
           <div className="mt-5"><OfficialLink href={httpsUrl(officialContent.mapsUrl)}>Ottieni indicazioni</OfficialLink></div>
         </div>
       </Reveal>
-      <Reveal delay={.1}><LocationMap embedUrl={officialContent.mapsEmbedUrl} /></Reveal>
+      <Reveal delay={.1}><LocationCard address={officialContent.address} mapsUrl={httpsUrl(officialContent.mapsUrl)} /></Reveal>
     </div>
   </section>;
 }

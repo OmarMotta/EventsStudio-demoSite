@@ -1,7 +1,7 @@
 export const eventTypes = ['Feste private', 'Diciottesimi', 'Wedding', 'Eventi aziendali', 'Feste di piazza', 'Spettacoli', 'Tourism'];
 export const CONTACT_FORM_NAME = 'events-studio-contatti';
 export const CONTACT_DEFINITION_PATH = '/__forms.html';
-export const PRIVACY_VERSION = '2026-10-20';
+export const PRIVACY_VERSION = '2026-10-29';
 
 export type Inquiry = {
   nome: string; cognome: string; telefono: string; email: string;

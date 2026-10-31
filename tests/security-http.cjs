@@ -7,8 +7,8 @@ const post = (body, headers = {}) => fetch(new URL('/api/contact', base), {
   method: 'POST', headers: { Origin: base.origin, 'Content-Type': 'application/json', ...headers }, body,
 });
 
-test('security headers protect pages and static form definition', async () => {
-  for (const path of ['/', '/contatti', '/privacy', '/__forms.html']) {
+test('security headers protect pages', async () => {
+  for (const path of ['/', '/contatti', '/privacy']) {
     const response = await fetch(new URL(path, base));
     assert.equal(response.status, 200, path);
     assert.equal(response.headers.get('x-frame-options'), 'DENY');
@@ -28,7 +28,7 @@ test('contact records have no public GET endpoint', async () => {
   assert.equal(response.status, 405);
 });
 test('files outside public cannot be downloaded as web assets', async () => {
-  for (const path of ['/.env', '/.git/config', '/src/lib/contact-store.ts', '/netlify.toml']) {
+  for (const path of ['/.env', '/.git/config', '/src/lib/contact-store.ts', '/__forms.html']) {
     const response = await fetch(new URL(path, base));
     assert.equal(response.status, 404, path);
     await response.body?.cancel();
@@ -68,19 +68,4 @@ test('unapproved service query does not become executable HTML', async () => {
 });
 
 
-test('local validation notice is restricted to loopback hosts', async () => {
-  const local = await fetch(new URL('/contatti', base));
-  assert.ok((await local.text()).includes('Anteprima locale: puoi controllare i campi'));
-  // Node fetch derives Host from the URL; use HTTP directly to emulate
-  // the reverse proxy's actual public Host without connecting to production.
-  const html = await new Promise((resolve, reject) => {
-    require('node:http').get(new URL('/contatti', base), { headers: { Host: 'eventsstudio-demo.netlify.app' } }, response => {
-      let body = '';
-      response.setEncoding('utf8');
-      response.on('data', chunk => { body += chunk; });
-      response.on('end', () => resolve(body));
-    }).on('error', reject);
-  });
-  assert.ok(!html.includes('Anteprima locale: puoi controllare i campi'));
-  assert.ok(html.includes('Invia richiesta'));
-});
+test('il modulo locale mantiene campi e invio server, senza simulazione',async()=>{const r=await fetch(new URL('/contatti',base));const html=await r.text();assert.ok(html.includes('Invia richiesta'));assert.ok(!html.includes('Anteprima locale: puoi controllare i campi'));});

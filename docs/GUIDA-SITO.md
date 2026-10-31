@@ -19,9 +19,7 @@ Le copertine supportano anche `video`: MP4 web, silenzioso, con `src` come poste
 
 ## Invio del modulo
 
-Il modulo usa Netlify Forms, con validazione condivisa frontend/backend, firma interna e protezioni distribuite tramite servizi nativi Netlify. La pagina `/privacy` descrive il trattamento delle richieste.
-
-Leggere **GESTIONE-CONTATTI.md** per notifiche, lettura e risposta da mobile, conservazione e assistenza. Leggere **VERIFICHE-CONTATTI.md** per configurazione, architettura, test, limiti e checklist del deploy. Il vecchio webhook non è più utilizzato.
+Il modulo usa un endpoint Next.js, Resend e protezioni persistenti Upstash Redis. Per configurazione, collaudo e gestione leggere [CONTATTI-HOSTINGER.md](CONTATTI-HOSTINGER.md).
 
 ## SEO e pubblicazione
 

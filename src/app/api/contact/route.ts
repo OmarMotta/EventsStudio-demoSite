@@ -1,8 +1,7 @@
-import { isIP } from 'node:net';
 import { PRIVACY_VERSION, validateInquiry } from '@/lib/contact';
 import { contactConfig } from '@/lib/contact-config';
 import { deliverContact } from '@/lib/contact-delivery';
-import { allowContact, contactSigningKey, finishReceipt, inquiryKey, openContactStore, readReceipt, reserveReceipt } from '@/lib/contact-store';
+import { allowContact, finishReceipt, inquiryKey, openContactStore, readReceipt, reserveReceipt } from '@/lib/contact-store';
 
 export const runtime = 'nodejs';
 const json = (body: unknown, status = 200, extra: Record<string, string> = {}) => Response.json(body, {
@@ -13,16 +12,9 @@ const uncertain = (id: string) => json({ error: 'Non possiamo confermare la rice
 
 export async function POST(request: Request) {
   const config = contactConfig();
+  if (!config.origin) return unavailable();
   const origin = request.headers.get('origin');
-  // Next.js can normalize the internal request URL to localhost behind a proxy.
-  // Compare with the actual Host as well, never with X-Forwarded-Host supplied by clients.
-  const internalUrl = new URL(request.url);
-  const host = request.headers.get('host');
-  const protocol = request.headers.get('x-forwarded-proto') === 'https' ? 'https:' : internalUrl.protocol;
-  const allowedOrigins = new Set([internalUrl.origin, config.origin]);
-  if (host) {
-    try { allowedOrigins.add(new URL(`${protocol}//${host}`).origin); } catch {}
-  }
+  const allowedOrigins = new Set([config.origin]);
   if (!origin || !allowedOrigins.has(origin) || request.headers.get('sec-fetch-site') === 'cross-site') return json({ error: 'Origine della richiesta non valida.' }, 403);
   if (request.headers.get('content-type')?.split(';')[0].trim().toLowerCase() !== 'application/json') return json({ error: 'Formato non valido.' }, 415);
   if (Number(request.headers.get('content-length') ?? 0) > 20000) return json({ error: 'Messaggio troppo lungo.' }, 413);
@@ -44,21 +36,14 @@ export async function POST(request: Request) {
   const result = validateInquiry(raw);
   if (!result.data) return json({ error: result.error, fields: result.fields }, 400);
   if (!config.enabled || !config.origin || !config.privacy) return unavailable();
-  // Netlify ingress supplies this address. Never trust a client-selected X-Forwarded-For.
-  const ip = request.headers.get('x-nf-client-connection-ip') ?? '';
-  if (!isIP(ip)) return unavailable();
   try {
-    console.info('contact_validation_complete');
-    const store = openContactStore();
-    const key = inquiryKey(result.data, `${config.origin}:${PRIVACY_VERSION}`);
+    const store = openContactStore(config);
+    const key = inquiryKey(result.data, config, PRIVACY_VERSION);
     const existing = await readReceipt(store, key);
-    console.info('contact_receipt_checked');
     if (existing) return existing.state === 'accepted'
       ? json({ ok: true, reference: existing.id, duplicate: true }) : uncertain(existing.id);
-    const rate = await allowContact(store, ip);
+    const rate = await allowContact(store, result.data.email, config);
     if (!rate.allowed) return json({ error: 'Hai effettuato diversi tentativi. Attendi qualche minuto prima di riprovare.' }, 429, { 'Retry-After': String(rate.retryAfter) });
-    const signingKey = await contactSigningKey(store);
-    console.info('contact_guards_ready');
     const receipt = await reserveReceipt(store, key);
     if (!receipt) {
       const concurrent = await readReceipt(store, key);
@@ -66,8 +51,7 @@ export async function POST(request: Request) {
       return concurrent ? uncertain(concurrent.id) : unavailable();
     }
     try {
-      console.info('contact_delivery_started');
-      await deliverContact(config.origin, result.data, receipt.id, config.privacy, signingKey);
+      await deliverContact(config, result.data, receipt.id);
       await finishReceipt(store, key, receipt, 'accepted');
       return json({ ok: true, reference: receipt.id });
     } catch {

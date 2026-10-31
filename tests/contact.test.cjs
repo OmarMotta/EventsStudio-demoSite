@@ -20,166 +20,75 @@ function load(file, imports = {}, extra = {}) {
   return module.exports;
 }
 const contact = load('src/lib/contact.ts');
-const signature = load('src/lib/contact-signature.ts');
-const valid = { nome: 'Test', cognome: 'Tecnico', telefono: '+390000000000', email: 'test@example.invalid', tipologia: 'Wedding', data: '2027-06-18', location: 'Ambiente di test', messaggio: 'Verifica automatica: nessun invio reale.', privacy: true };
-const html = text => new Response(text, { status: 200, headers: { 'Content-Type': 'text/html' } });
-const request = (body = valid, headers = {}) => new Request('https://eventsstudio-demo.netlify.app/api/contact', {
-  method: 'POST', headers: { origin: 'https://eventsstudio-demo.netlify.app', 'content-type': 'application/json', 'x-nf-client-connection-ip': '192.0.2.1', ...headers }, body: JSON.stringify(body),
-});
-function setup(options = {}) {
-  const records = new Map();
-  const metadata = new Map();
-  const received = [];
-  let deliveryCalls = 0;
-  const store = {
-    async get(key) { return records.has(key) ? JSON.parse(JSON.stringify(records.get(key))) : null; },
-    async setJSON(key, data, condition = {}) {
-      if (condition.onlyIfNew && records.has(key)) return { modified: false };
-      records.set(key, JSON.parse(JSON.stringify(data)));
-      metadata.set(key, condition.metadata ?? {});
-      return { modified: true };
-    },
-    async getMetadata(key) { return records.has(key) ? { metadata: metadata.get(key), etag: 'test' } : null; },
-    async delete(key) { records.delete(key); },
-    async *list() { yield { blobs: [...records.keys()].map(key => ({ key })) }; },
-  };
-  const getStore = () => { if (options.storageDown) throw Error('storage down'); return store; };
-  const guards = load('src/lib/contact-store.ts', { '@netlify/blobs': { getStore }, './contact-signature': signature });
-  const ingress = load('netlify/edge-functions/contact-ingress.ts', { '@netlify/blobs': { getStore }, '../../src/lib/contact-signature.ts': signature }).default;
-  const delivery = load('src/lib/contact-delivery.ts', { './contact': contact, './contact-signature': signature }, { fetch: async (url, init) => {
-    deliveryCalls++;
-    if (options.delivery) return options.delivery(url, init);
-    const incoming = new Request(url, init);
-    const blocked = await ingress(incoming);
-    if (blocked) return blocked;
-    received.push(Object.fromEntries(new URLSearchParams(init.body)));
-    return html('<html><body>Thank you! Your submission has been received.</body></html>');
-  } });
-  const config = { enabled: true, origin: 'https://eventsstudio-demo.netlify.app', privacy: '/privacy', ...options.config };
-  const post = load('src/app/api/contact/route.ts', {
-    '@/lib/contact': contact, '@/lib/contact-config': { contactConfig: () => config }, '@/lib/contact-store': guards, '@/lib/contact-delivery': delivery,
-  }).POST;
-  const cleanup = load('netlify/functions/contact-cleanup.ts', { '@netlify/blobs': { getStore }, '../../src/lib/contact-store': guards }).default;
-  return { post, records, metadata, received, ingress, guards, store, cleanup, delivery, calls: () => deliveryCalls };
+const valid = { nome:'Mario', cognome:'Rossi', telefono:'+39 338 5733403', email:'visitor@example.org', tipologia:'Wedding', data:'2027-06-18', location:'Potenza', messaggio:'Vorrei informazioni sul servizio DJ.', privacy:true };
+const config = { enabled:true, origin:'https://events.example.org', privacy:'/privacy', apiKey:'test-only', from:'sender@example.org', to:'owner@example.org', redisUrl:'https://redis.example.org', redisToken:'test-only', secret:'s'.repeat(40) };
+const request = (body=valid, headers={}) => new Request(config.origin+'/api/contact',{method:'POST',headers:{Origin:config.origin,'Content-Type':'application/json',...headers},body:JSON.stringify(body)});
+function setup(options={}) {
+ const records=new Map(), commands=[], emails=[];
+ const guards=load('src/lib/contact-store.ts',{}, {fetch:async(url,init)=>{
+  if(options.storageDown) throw Error('offline');
+  const c=JSON.parse(init.body);commands.push(c);let result=null;
+  if(c[0]==='GET') result=records.get(c[1])??null;
+  if(c[0]==='SET') {if(c.includes('NX')&&records.has(c[1])) result=null;else {records.set(c[1],c[2]);result='OK';}}
+  if(c[0]==='EVAL') {const g=Number(records.get(c[3])||0),e=Number(records.get(c[4])||0);result=g>=30||e>=5?0:1;if(result){records.set(c[3],g+1);records.set(c[4],e+1);}}
+  return Response.json({result});
+ }});
+ const delivery=load('src/lib/contact-delivery.ts',{'./contact':contact},{fetch:async(url,init)=>{emails.push({url,...init,body:JSON.parse(init.body)});return options.provider ? options.provider() : Response.json({id:'provider-receipt'});}});
+ const post=load('src/app/api/contact/route.ts',{'@/lib/contact':contact,'@/lib/contact-config':{contactConfig:()=>({...config,...options.config})},'@/lib/contact-store':guards,'@/lib/contact-delivery':delivery}).POST;
+ return {post,records,commands,emails,guards,delivery};
 }
-
-test('validazione: campi obbligatori, whitespace, limiti, enum, telefono e consenso', () => {
-  assert.ok(contact.validateInquiry(valid).data);
-  for (const change of [{ nome: '' }, { nome: '   ' }, { privacy: false }, { privacy: 'true' }, { email: 'bad' }, { email: 'a\r\n@bad.it' }, { telefono: '+...---' }, { telefono: '12345' }, { telefono: '1'.repeat(16) }, { tipologia: 'Inventata' }, { website: 'spam' }, { website: false }, { messaggio: 'a'.repeat(4001) }, { nome: 'a'.repeat(201) }, { location: {} }]) assert.ok(contact.validateInquiry({ ...valid, ...change }).error, JSON.stringify(change));
-  for (const bad of [null, [], 0, 'test']) assert.ok(contact.validateInquiry(bad).error);
+test('validazione completa, campi obbligatori, consenso, enum, limiti e honeypot',()=>{
+ assert.ok(contact.validateInquiry(valid).data);
+ for(const key of Object.keys(valid).filter(k=>k!=='data')) {const x={...valid};delete x[key];assert.ok(contact.validateInquiry(x).error,key);}
+ for(const patch of [{email:'a@b'},{email:'a@example.org\r\nBcc:x@y.org'},{privacy:'true'},{telefono:'abc'},{tipologia:'unknown'},{nome:'x'.repeat(201)},{messaggio:'x'.repeat(4001)},{website:'bot'},{data:'2027-02-30'}]) assert.ok(contact.validateInquiry({...valid,...patch}).error);
+ assert.ok(contact.validateInquiry({...valid,data:''}).data);assert.ok(contact.validateInquiry({...valid,data:'2028-02-29'}).data);
 });
-test('data realmente facoltativa e verifica calendario, inclusi anni bisestili', () => {
-  for (const data of ['', undefined, '2028-02-29']) assert.ok(contact.validateInquiry({ ...valid, data }).data);
-  for (const data of ['2027-02-29', '2027-02-30', '2027-13-01', '27/02/2027', {}, null]) {
-    if (data === null) continue;
-    assert.ok(contact.validateInquiry({ ...valid, data }).error);
-  }
+test('normalizzazione e rimozione proprietà non previste',()=>{const r=contact.validateInquiry({...valid,nome:' Mario ',admin:true});assert.equal(r.data.nome,'Mario');assert.equal(r.data.admin,undefined);});
+test('origine configurata, Host contraffatto e origine assente rifiutati',async()=>{
+ const x=setup();assert.equal((await x.post(request(valid,{Origin:'https://attacker.org',Host:'attacker.org'}))).status,403);
+ assert.equal((await x.post(request(valid,{Origin:'null'}))).status,403);
+ assert.equal((await x.post(request(valid,{'Sec-Fetch-Site':'cross-site'}))).status,403);assert.equal(x.emails.length,0);
 });
-test('normalizza e non inoltra proprietà estranee', () => {
-  const value = contact.validateInquiry({ ...valid, nome: '  Test  ', extra: 'non inoltrare' }).data;
-  assert.equal(value.nome, 'Test'); assert.equal(value.extra, undefined);
+test('JSON, dimensione dichiarata/reale, formato e dati invalidi',async()=>{
+ const x=setup();assert.equal((await x.post(request({}, {'Content-Type':'text/plain'}))).status,415);
+ assert.equal((await x.post(request({}, {'Content-Length':'21000'}))).status,413);
+ assert.equal((await x.post(request({messaggio:'x'.repeat(21000)}))).status,413);
+ assert.equal((await x.post(request({}))).status,400);
+ assert.equal((await x.post(new Request(config.origin+'/api/contact',{method:'POST',headers:{Origin:config.origin,'Content-Type':'application/json'},body:'{'}))).status,400);
 });
-test('backend: origine, formato, JSON malformato e dimensione reale dello stream', async () => {
-  const { post, calls } = setup();
-  assert.equal((await post(request(valid, { origin: 'https://external.invalid' }))).status, 403);
-  assert.equal((await post(request(valid, { 'sec-fetch-site': 'cross-site' }))).status, 403);
-  assert.equal((await post(request(valid, { origin: 'null' }))).status, 403);
-  assert.equal((await post(request(valid, { 'content-type': 'application/json-malformed' }))).status, 415);
-  assert.equal((await post(request({ ...valid, email: 'bad' }))).status, 400);
-  assert.equal((await post(request({ ...valid, messaggio: 'a'.repeat(21000) }))).status, 413);
-  const malformed = request(); await malformed.text();
-  assert.equal((await post(malformed)).status, 400);
-  assert.equal(calls(), 0);
+test('configurazione mancante o archivio indisponibile: nessun invio',async()=>{
+ for(const options of [{config:{enabled:false}},{storageDown:true}]) {const x=setup(options);assert.equal((await x.post(request())).status,503);assert.equal(x.emails.length,0);}
 });
-test('nessun invio senza configurazione, IP attendibile o archivio disponibile', async () => {
-  for (const options of [{ config: { enabled: false } }, { config: { privacy: null } }, { storageDown: true }]) {
-    const ctx = setup(options); assert.equal((await ctx.post(request())).status, 503); assert.equal(ctx.calls(), 0);
-  }
-  const ctx = setup();
-  assert.equal((await ctx.post(request(valid, { 'x-nf-client-connection-ip': '', 'x-forwarded-for': '192.0.2.1' }))).status, 503);
+test('invio completo, HTML sicuro, Reply-To, consenso, testo e idempotenza provider',async()=>{
+ const x=setup();const response=await x.post(request({...valid,messaggio:'<script>alert(1)</script> & dettagli'}));assert.equal(response.status,200);
+ const receipt=await response.json(),mail=x.emails[0];assert.equal(mail.url,'https://api.resend.com/emails');assert.equal(mail.body.reply_to,valid.email);
+ for(const key of ['nome','cognome','email','telefono','tipologia','data','location']) assert.ok(mail.body.text.includes(valid[key]));
+ assert.ok(mail.body.text.includes(contact.PRIVACY_VERSION));assert.ok(mail.body.html.includes('&lt;script&gt;'));assert.ok(!mail.body.html.includes('<script>'));
+ assert.equal(mail.headers['Idempotency-Key'],'events-contact/'+receipt.reference);
 });
-test('origine corretta dietro normalizzazione localhost di Next.js e HTTPS del proxy', async () => {
-  const ctx = setup({ config: { enabled: false } });
-  const proxyRequest = (origin, host, forwardedProto) => new Request('http://localhost:3011/api/contact', {
-    method: 'POST', headers: { origin, host, 'content-type': 'application/json', ...(forwardedProto ? { 'x-forwarded-proto': forwardedProto } : {}) }, body: JSON.stringify(valid),
-  });
-  assert.equal((await ctx.post(proxyRequest('http://127.0.0.1:3011', '127.0.0.1:3011'))).status, 503);
-  assert.equal((await ctx.post(proxyRequest('https://example.org', 'example.org', 'https'))).status, 503);
-  assert.equal((await ctx.post(proxyRequest('https://external.invalid', 'example.org', 'https'))).status, 403);
+test('retry identici e invii concorrenti: una sola email',async()=>{
+ const x=setup();const responses=await Promise.all(Array.from({length:6},()=>x.post(request())));assert.equal(x.emails.length,1);assert.ok(responses.some(r=>r.status===200));
+ const result=await (await x.post(request())).json();assert.equal(result.ok,true);assert.equal(result.duplicate,true);
 });
-test('flusso server → firma → protezione ingresso → ricevitore simulato: payload minimizzato e ricevuta', async () => {
-  const ctx = setup(); const response = await ctx.post(request({ ...valid, extra: 'non inoltrare' }));
-  assert.equal(response.status, 200); assert.equal(response.headers.get('cache-control'), 'no-store');
-  const result = await response.json(); assert.equal(result.ok, true); assert.match(result.reference, /^[a-f0-9-]{36}$/);
-  assert.equal(ctx.received.length, 1); const saved = ctx.received[0];
-  assert.equal(saved['form-name'], contact.CONTACT_FORM_NAME); assert.equal(saved.email, valid.email);
-  assert.equal(saved.privacy, 'true'); assert.equal(saved.informativa, '/privacy');
-  assert.equal(saved.versioneInformativa, contact.PRIVACY_VERSION); assert.equal(saved.richiesta, result.reference); assert.equal(saved.extra, undefined);
-  assert.equal(JSON.stringify([...ctx.records]).includes(valid.messaggio), false);
-  assert.equal(JSON.stringify([...ctx.records]).includes(valid.email), false);
-  assert.equal(JSON.stringify([...ctx.records]).includes('192.0.2.1'), false);
+test('rifiuti, timeout, risposte malformate: nessun falso successo né reinvio',async()=>{
+ for(const provider of [()=>Response.json({error:'secret provider detail'},{status:403}),()=>Response.json({},{status:429}),()=>Response.json({},{status:500}),()=>{throw Error('timeout');},()=>Response.json({}),()=>new Response('invalid')]) {
+ const x=setup({provider});const r=await x.post(request());assert.equal(r.status,409);const body=await r.json();assert.equal(body.uncertain,true);assert.equal(body.ok,undefined);assert.ok(!JSON.stringify(body).includes('secret provider detail'));
+ await x.post(request());assert.equal(x.emails.length,1);
+ }
 });
-test('duplicato dopo conferma: stessa ricevuta, un solo invio', async () => {
-  const ctx = setup(); const first = await (await ctx.post(request())).json();
-  const second = await (await ctx.post(request())).json();
-  assert.equal(second.ok, true); assert.equal(second.duplicate, true); assert.equal(first.reference, second.reference); assert.equal(ctx.calls(), 1);
+test('quota persistente per email e quota globale, anche con indirizzi diversi',async()=>{
+ const x=setup();for(let i=0;i<5;i++) assert.equal((await x.post(request({...valid,messaggio:String(i)}))).status,200);
+ assert.equal((await x.post(request({...valid,messaggio:'six'}))).status,429);
+ const y=setup();for(let i=0;i<30;i++) assert.equal((await y.post(request({...valid,email:`a${i}@example.org`}))).status,200);
+ assert.equal((await y.post(request({...valid,email:'extra@example.org'}))).status,429);
 });
-test('invii simultanei identici: prenotazione atomica impedisce doppia notifica', async () => {
-  const ctx = setup(); const responses = await Promise.all(Array.from({ length: 12 }, () => ctx.post(request())));
-  assert.equal(ctx.calls(), 1); assert.ok(responses.some(res => res.status === 200));
-  assert.ok(responses.every(res => [200, 409, 429].includes(res.status)));
+test('archivio contiene solo impronte, UUID e stati; TTL e comandi atomici',async()=>{
+ const x=setup();await x.post(request());const serialized=JSON.stringify([...x.records]);for(const v of [valid.email,valid.nome,valid.messaggio,config.apiKey]) assert.ok(!serialized.includes(v));
+ assert.ok(x.commands.some(c=>c[0]==='SET'&&c.includes('NX')&&c.includes(172800)));assert.ok(x.commands.some(c=>c.includes('KEEPTTL')));assert.ok(x.commands.some(c=>c[0]==='EVAL'&&c[1].includes('EXPIRE')));
 });
-test('limite distribuito: cinque nuove richieste ogni dieci minuti per IP, con Retry-After', async () => {
-  const ctx = setup();
-  for (let i = 0; i < 5; i++) assert.equal((await ctx.post(request({ ...valid, messaggio: `Richiesta distinta ${i}` }))).status, 200);
-  const denied = await ctx.post(request({ ...valid, messaggio: 'Sesta richiesta' }));
-  assert.equal(denied.status, 429); assert.ok(Number(denied.headers.get('retry-after')) > 0); assert.equal(ctx.calls(), 5);
-  assert.equal((await ctx.post(request({ ...valid, messaggio: 'Altro indirizzo' }, { 'x-nf-client-connection-ip': '192.0.2.2' }))).status, 200);
-});
-test('slot antispam concorrenti: la quota non viene superata', async () => {
-  const ctx = setup(); const results = await Promise.all(Array.from({ length: 20 }, () => ctx.guards.allowContact(ctx.store, '192.0.2.1', 1800000)));
-  assert.equal(results.filter(result => result.allowed).length, 5);
-});
-test('timeout, errori e form non rilevato: esito incerto, nessun falso successo e nessun reinvio', async () => {
-  for (const delivery of [async () => { throw Error('timeout'); }, async () => new Response('error', { status: 500 }), async () => html(fs.readFileSync('public/__forms.html', 'utf8')), async () => new Response('{}', { headers: { 'Content-Type': 'application/json' } }), async () => html('')]) {
-    const ctx = setup({ delivery });
-    const first = await ctx.post(request()); assert.equal(first.status, 409); assert.equal((await first.json()).uncertain, true);
-    assert.equal((await ctx.post(request())).status, 409); assert.equal(ctx.calls(), 1);
-  }
-});
-test('firma: valida corpo e timestamp e rifiuta modifica, scadenza e formato errato', async () => {
-  const now = Date.now(); const secret = 'private-server-key'; const timestamp = String(now); const body = 'form-name=test';
-  const signed = await signature.signSubmission(secret, timestamp, body);
-  assert.equal(await signature.verifySubmission(secret, timestamp, body, signed, now), true);
-  assert.equal(await signature.verifySubmission(secret, timestamp, body + 'x', signed, now), false);
-  assert.equal(await signature.verifySubmission(secret, timestamp, body, signed, now + 61000), false);
-  assert.equal(await signature.verifySubmission(secret, timestamp, body, 'bad', now), false);
-});
-test('ingresso Netlify: blocca invio diretto e percorsi alternativi; lascia passare JSON applicativo', async () => {
-  const ctx = setup();
-  const direct = path => new Request(`https://eventsstudio-demo.netlify.app${path}`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'form-name=events-studio-contatti&email=spam%40example.invalid' });
-  for (const path of ['/__forms.html', '/__forms', '/', '/assets/logo.png']) assert.equal((await ctx.ingress(direct(path))).status, 403);
-  assert.equal(await ctx.ingress(request()), undefined);
-  assert.equal(await ctx.ingress(new Request('https://eventsstudio-demo.netlify.app/__forms.html')), undefined);
-});
-test('redirect: non inoltra dati a domini esterni e non segue redirect che ripetono POST', async () => {
-  for (const status of [302, 303, 307, 308]) {
-    const ctx = setup({ delivery: async () => new Response('', { status, headers: { Location: 'https://external.invalid' } }) });
-    assert.equal((await ctx.post(request())).status, 409); assert.equal(ctx.calls(), 1);
-  }
-});
-test('pulizia giornaliera: elimina solo guardie scadute, conserva chiave privata e dati recenti', async () => {
-  const ctx = setup(); const old = Date.now() - 49 * 3600 * 1000;
-  await ctx.store.setJSON('requests/old', {}, { metadata: { createdAt: old } });
-  await ctx.store.setJSON('rate/old', {}, { metadata: { createdAt: old } });
-  await ctx.store.setJSON('requests/new', {}, { metadata: { createdAt: Date.now() } });
-  await ctx.store.setJSON(signature.CONTACT_SIGNING_KEY, 'private-key', { metadata: { createdAt: old } });
-  await ctx.cleanup();
-  assert.equal(ctx.records.has('requests/old'), false); assert.equal(ctx.records.has('rate/old'), false);
-  assert.equal(ctx.records.has('requests/new'), true); assert.equal(ctx.records.has(signature.CONTACT_SIGNING_KEY), true);
-});
-test('definizione statica Netlify contiene tutti i campi del payload', () => {
-  const definition = fs.readFileSync('public/__forms.html', 'utf8');
-  assert.ok(definition.includes(`name="${contact.CONTACT_FORM_NAME}"`));
-  for (const name of [...Object.keys(valid), 'website', 'richiesta', 'informativa', 'versioneInformativa', 'ricevutaIl']) assert.ok(definition.includes(`name="${name}"`), name);
+test('configurazione sicura e locale supportata, nessun fallback hosting',()=>{
+ const env={CONTACT_SITE_ORIGIN:'http://127.0.0.1:3000',RESEND_API_KEY:'test',CONTACT_TO_EMAIL:'owner@example.org',CONTACT_FROM_EMAIL:'sender@example.org',UPSTASH_REDIS_REST_URL:'https://redis.example.org',UPSTASH_REDIS_REST_TOKEN:'test',CONTACT_GUARD_SECRET:'s'.repeat(32)};
+ const c=load('src/lib/contact-config.ts',{'./contact':contact},{process:{env}});assert.equal(c.contactConfig().enabled,true);
+ env.CONTACT_SITE_ORIGIN='http://public.example.org';assert.equal(c.contactConfig().enabled,false);
+ env.CONTACT_SITE_ORIGIN='https://public.example.org';env.CONTACT_FROM_EMAIL='bad\r\nfrom@example.org';assert.equal(c.contactConfig().enabled,false);
 });

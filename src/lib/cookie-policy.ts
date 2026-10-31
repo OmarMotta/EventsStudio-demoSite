@@ -22,11 +22,7 @@ export const cookiePolicy = {
       title: 'Servizi presenti nel sito',
       paragraphs: [
         'Il codice del sito non integra Google Analytics, Google Tag Manager o Meta Pixel. Fotografie, video di presentazione e font sono serviti dal sito stesso. Il modulo Contattaci non salva i dati compilati nel localStorage e non iscrive a servizi promozionali.',
-        'Netlify fornisce l’hosting e le funzioni tecniche del sito. Nella configurazione verificata è presente anche il badge «Powered by Netlify», aggiunto dalla piattaforma. Secondo la documentazione del fornitore, il badge non effettua analisi della navigazione né raccolta di dati; può usare l’archiviazione locale del dominio per ricordare scelte relative alla propria interfaccia.',
-      ],
-      links: [
-        { label: 'Netlify: funzionamento e archiviazione del badge', href: 'https://docs.netlify.com/manage/projects/powered-by-netlify-badge/', external: true },
-        { label: 'Informativa privacy Netlify', href: 'https://www.netlify.com/privacy/', external: true },
+        'Il modulo usa servizi server-side per invio email e protezioni tecniche: questi collegamenti non caricano script dei fornitori nel browser e non salvano i dati del modulo nel dispositivo.',
       ],
     },
     {
@@ -38,13 +34,6 @@ export const cookiePolicy = {
       links: [
         { label: 'Google: tipi di cookie, finalità e durata', href: 'https://policies.google.com/technologies/cookies?hl=it', external: true },
         { label: 'Informativa privacy Google', href: 'https://policies.google.com/privacy?hl=it', external: true },
-      ],
-    },
-    {
-      title: 'Archiviazione locale del badge Netlify',
-      paragraphs: [
-        'Lo script del badge pubblico può leggere la chiave «nl-hud:public:v1» nel localStorage del dominio del sito. Serve a ricordare lo stato dell’interfaccia quando le relative funzioni sono disponibili; non contiene i dati inseriti nel modulo Contattaci.',
-        'Nello script esaminato l’eventuale scelta di nascondere il badge pubblico ha una validità di sette giorni. La disponibilità di questa funzione dipende dal piano Netlify. Altre preferenze dell’interfaccia possono rimanere fino alla cancellazione dell’archiviazione locale; il browser può applicare scadenze ulteriori. Non è un cookie di analisi aggiunto da Events Studio.',
       ],
     },
     {
@@ -63,7 +52,7 @@ export const cookiePolicy = {
     {
       title: 'Destinatari, trasferimenti e diritti',
       paragraphs: [
-        'I servizi descritti possono comportare trattamenti da parte di Netlify e Google anche fuori dallo Spazio economico europeo, secondo le condizioni e le garanzie applicabili ai rispettivi servizi. Per informazioni sulle garanzie pertinenti puoi contattare il titolare; le documentazioni dei fornitori sono collegate in questa pagina e nell’informativa privacy.',
+        'I servizi descritti possono comportare trattamenti da parte dei fornitori indicati nell’informativa privacy e, quando si aprono i link esterni, di Google anche fuori dallo Spazio economico europeo, secondo le condizioni e le garanzie applicabili ai rispettivi servizi. Per informazioni sulle garanzie pertinenti puoi contattare il titolare; le documentazioni dei fornitori sono collegate in questa pagina e nell’informativa privacy.',
         'Nei casi previsti dal GDPR puoi esercitare i diritti di accesso, rettifica, cancellazione, limitazione, portabilità e opposizione scrivendo a events_studiopz@hotmail.com. Quando un trattamento si fonda sul consenso, puoi revocarlo senza pregiudicare la liceità del trattamento precedente. Hai inoltre diritto di proporre reclamo al Garante per la protezione dei dati personali.',
         'Questa informativa viene aggiornata se cambiano i servizi o le tecnologie utilizzate. La durata dei messaggi di contatto e quella dei registri tecnici del modulo sono descritte separatamente nell’informativa privacy.',
       ],

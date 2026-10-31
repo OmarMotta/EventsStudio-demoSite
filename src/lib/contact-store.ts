@@ -1,61 +1,37 @@
-import { getStore } from '@netlify/blobs';
-import { createHash, randomBytes, randomUUID } from 'node:crypto';
+import { createHmac, randomUUID } from 'node:crypto';
 import type { Inquiry } from './contact';
-import { CONTACT_SIGNING_KEY } from './contact-signature';
-
-export const CONTACT_STORE_NAME = 'events-studio-contact-guards';
-export const GUARD_RETENTION_MS = 48 * 60 * 60 * 1000;
-const WINDOW_MS = 10 * 60 * 1000;
-const WINDOW_LIMIT = 5;
-
-type Receipt = { id: string; state: 'processing' | 'accepted' | 'uncertain'; createdAt: number };
-type Store = ReturnType<typeof getStore>;
-const hash = (value: string) => createHash('sha256').update(value).digest('hex');
-export const openContactStore = () => getStore({
-  name: CONTACT_STORE_NAME, consistency: 'strong',
-  // Technical guards must bypass Next.js's persistent data cache.
-  fetch: async (input, init) => {
-    console.info('contact_storage_request', { method: init?.method });
-    const response = await fetch(input, { ...init, cache: 'no-store', signal: AbortSignal.timeout(8000) });
-    console.info('contact_storage_response', { status: response.status });
-    return response;
-  },
-});
-export const inquiryKey = (inquiry: Inquiry, privacyVersion: string) => `requests/${hash(JSON.stringify([privacyVersion, inquiry]))}`;
-
-export async function contactSigningKey(store: Store) {
-  const existing = await store.get(CONTACT_SIGNING_KEY, { type: 'json' });
-  if (typeof existing === 'string') return existing;
-  const candidate = randomBytes(32).toString('base64url');
-  await store.setJSON(CONTACT_SIGNING_KEY, candidate, { onlyIfNew: true });
-  const stored = await store.get(CONTACT_SIGNING_KEY, { type: 'json' });
-  if (typeof stored !== 'string') throw new Error('Signing key unavailable');
-  return stored;
+import type { ContactConfig } from './contact-config';
+export type Receipt = { id: string; state: 'processing' | 'accepted' | 'uncertain' };
+export const RETENTION_SECONDS = 172800;
+export function openContactStore(config: ContactConfig) {
+  return async (command: (string | number)[]): Promise<unknown> => {
+    const response = await fetch(config.redisUrl, { method: 'POST', headers: { Authorization: `Bearer ${config.redisToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify(command), cache: 'no-store', redirect: 'error', signal: AbortSignal.timeout(5000) });
+    if (!response.ok) throw new Error('Guard storage unavailable');
+    const result = await response.json();
+    if (result.error) throw new Error('Guard command failed');
+    return result.result;
+  };
 }
-
+type Store = ReturnType<typeof openContactStore>;
+export const fingerprint = (secret: string, value: string) => createHmac('sha256', secret).update(value).digest('hex');
+export const inquiryKey = (inquiry: Inquiry, config: ContactConfig, version: string) => `contact:${fingerprint(config.secret, JSON.stringify([config.origin, version, inquiry]))}`;
 export async function readReceipt(store: Store, key: string): Promise<Receipt | null> {
-  // Only the retention job expires keys. Deleting here would race active retries.
-  return store.get(key, { type: 'json' }) as Promise<Receipt | null>;
+  const value = await store(['GET', key]);
+  return typeof value === 'string' ? JSON.parse(value) as Receipt : null;
 }
-
 export async function reserveReceipt(store: Store, key: string) {
-  const receipt: Receipt = { id: randomUUID(), state: 'processing', createdAt: Date.now() };
-  const result = await store.setJSON(key, receipt, { onlyIfNew: true, metadata: { createdAt: receipt.createdAt } });
-  return result.modified ? receipt : null;
+  const receipt: Receipt = { id: randomUUID(), state: 'processing' };
+  return await store(['SET', key, JSON.stringify(receipt), 'NX', 'EX', RETENTION_SECONDS]) === 'OK' ? receipt : null;
 }
-
-export async function finishReceipt(store: Store, key: string, receipt: Receipt, state: 'accepted' | 'uncertain') {
-  await store.setJSON(key, { ...receipt, state }, { metadata: { createdAt: receipt.createdAt } });
+export async function finishReceipt(store: Store, key: string, receipt: Receipt, state: Receipt['state']) {
+  // Preserve original expiration; do not renew retention on retries.
+  if (await store(['SET', key, JSON.stringify({ ...receipt, state }), 'XX', 'KEEPTTL']) !== 'OK') throw new Error('Receipt missing');
 }
-
-export async function allowContact(store: Store, ip: string, now = Date.now()) {
-  const window = Math.floor(now / WINDOW_MS);
-  // Atomic fixed slots, rather than a read/modify/write counter across instances.
-  // No raw IP address or message body is stored in this technical registry.
-  const prefix = `rate/${window}/${hash(`${window}:${ip}`)}`;
-  for (let slot = 0; slot < WINDOW_LIMIT; slot++) {
-    const { modified } = await store.setJSON(`${prefix}/${slot}`, { createdAt: now }, { onlyIfNew: true, metadata: { createdAt: now } });
-    if (modified) return { allowed: true, retryAfter: 0 };
-  }
-  return { allowed: false, retryAfter: Math.ceil(((window + 1) * WINDOW_MS - now) / 1000) };
+export async function allowContact(store: Store, email: string, config: ContactConfig) {
+  // Atomic global + per-address quota; does not trust spoofable forwarding headers.
+  // Global cap bounds abuse even if attackers rotate addresses or IPs.
+  const script = `local g=tonumber(redis.call('GET',KEYS[1]) or '0'); local e=tonumber(redis.call('GET',KEYS[2]) or '0'); if g>=30 or e>=5 then return 0 end; for i=1,2 do if redis.call('INCR',KEYS[i])==1 then redis.call('EXPIRE',KEYS[i],600) end end; return 1`;
+  const scope = fingerprint(config.secret, config.origin || '');
+  const allowed = await store(['EVAL', script, 2, `rate:${scope}:global`, `rate:${scope}:${fingerprint(config.secret, email.toLowerCase())}`]);
+  return { allowed: allowed === 1, retryAfter: 600 };
 }

@@ -14,11 +14,11 @@ if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Usare un indiriz
 const payload = {
   nome: 'Verifica', cognome: 'Tecnica', telefono: '+39 338 573 3403', email,
   tipologia: 'Eventi aziendali', data: '', location: 'Collaudo del modulo del sito',
-  messaggio: `COLLAUDO TECNICO ${randomUUID()}. Verifica concordata del modulo Contattaci, non è una richiesta commerciale. Controllare registrazione in Netlify Forms, ricezione della notifica e indirizzo di risposta.`, privacy: true,
+  messaggio: `COLLAUDO TECNICO ${randomUUID()}. Verifica concordata del modulo Contattaci, non è una richiesta commerciale. Controllare accettazione in Resend, ricezione della notifica e indirizzo di risposta.`, privacy: true,
 };
 const post = () => fetch(new URL('/api/contact', base), {
   method: 'POST', headers: { Origin: base.origin, 'Content-Type': 'application/json' },
-  body: JSON.stringify(payload), signal: AbortSignal.timeout(30000),
+  body: JSON.stringify(payload), signal: AbortSignal.timeout(45000),
 });
 
 test('produzione: pagine reali, registrazione tramite API e retry identico senza nuova consegna', async () => {
@@ -35,5 +35,5 @@ test('produzione: pagine reali, registrazione tramite API e retry identico senza
   assert.equal(first.ok, true); assert.match(first.reference, /^[a-f0-9-]{36}$/);
   const retryResponse = await post(); const retry = await retryResponse.json();
   assert.equal(retryResponse.status, 200); assert.equal(retry.reference, first.reference); assert.equal(retry.duplicate, true);
-  console.info(`Richiesta di collaudo: ${first.reference}. Verificare ora la presenza in Netlify Forms e chiedere al titolare conferma di ricezione e Reply-To. Questo test HTTP non legge la casella email e non certifica la consegna SMTP.`);
+  console.info(`Richiesta di collaudo: ${first.reference}. Verificare ora la accettazione in Resend e chiedere al titolare conferma di ricezione e Reply-To. Questo test HTTP non legge la casella email e non certifica la consegna SMTP.`);
 });

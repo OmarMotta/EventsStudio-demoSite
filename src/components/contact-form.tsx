@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { eventTypes, validateInquiry, type FieldErrors, type Inquiry, type InquiryField } from '@/lib/contact';
 
-type Props = { localPreview?: boolean; enabled: boolean; privacyUrl: string | null; email: string | null; phone: string | null; initialEvent?: string; initialService?: string };
+type Props = { enabled: boolean; privacyUrl: string | null; email: string | null; phone: string | null; initialEvent?: string; initialService?: string };
 type Outcome = { kind: 'idle' | 'error' | 'success' | 'uncertain'; message: string; reference?: string };
 const textInputs = [
   { name: 'nome', label: 'Nome', auto: 'given-name', type: 'text', max: 200 },
@@ -12,7 +12,7 @@ const textInputs = [
   { name: 'email', label: 'Email', auto: 'email', type: 'email', max: 254 },
 ] as const;
 
-export function ContactForm({ localPreview = false, enabled, privacyUrl, email, phone, initialEvent = '', initialService = '' }: Props) {
+export function ContactForm({ enabled, privacyUrl, email, phone, initialEvent = '', initialService = '' }: Props) {
   const [outcome, setOutcome] = useState<Outcome>({ kind: 'idle', message: '' });
   const [errors, setErrors] = useState<FieldErrors>({});
   const [busy, setBusy] = useState(false);
@@ -60,10 +60,6 @@ export function ContactForm({ localPreview = false, enabled, privacyUrl, email, 
       return;
     }
     setErrors({});
-    if (localPreview) {
-      announce({ kind: 'idle', message: 'I dati sono validi. Per inviare la richiesta usa il sito pubblicato: questa anteprima locale non è collegata al servizio di ricezione.' });
-      return;
-    }
     if (!navigator.onLine) {
       announce({ kind: uncertain ? 'uncertain' : 'error', message: 'La connessione sembra assente. I dati restano nel modulo: riconnettiti prima di riprovare.' });
       return;
@@ -73,7 +69,7 @@ export function ContactForm({ localPreview = false, enabled, privacyUrl, email, 
     setBusy(true);
     setErrors({});
     const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 25000);
+    const timeout = window.setTimeout(() => controller.abort(), 45000);
     try {
       const response = await fetch('/api/contact', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -82,7 +78,7 @@ export function ContactForm({ localPreview = false, enabled, privacyUrl, email, 
         mode: 'same-origin', credentials: 'omit', redirect: 'error', cache: 'no-store', referrerPolicy: 'strict-origin',
         body: JSON.stringify(validation.data), signal: controller.signal,
       });
-      // Netlify can return a platform HTML/text response before our JSON route.
+      // A proxy may return a plain-text response before the JSON route.
       if (response.status === 429) {
         const delay = Number(response.headers.get('Retry-After'));
         setRetryAt(Date.now() + (Number.isFinite(delay) && delay > 0 ? Math.min(delay, 600) : 60) * 1000);
@@ -111,7 +107,6 @@ export function ContactForm({ localPreview = false, enabled, privacyUrl, email, 
     <div className="grid gap-12 border-t border-white/20 pt-10 lg:grid-cols-[.7fr_1.3fr]">
       <div>
         <h2 id="form-title" className="font-display text-4xl leading-tight md:text-6xl">Contatti<span className="text-sand">.</span></h2>
-        {localPreview && <p role="note" className="mb-6 max-w-sm border-l border-sand pl-5 text-sm leading-relaxed text-white/70">Anteprima locale: puoi controllare i campi, ma l’invio e la registrazione delle richieste sono disponibili sul sito pubblicato.</p>}
         <p id="form-help" className="mt-6 max-w-sm text-base leading-relaxed text-white/60">Partiamo dalla tua idea. I campi contrassegnati con * sono obbligatori.</p>
         <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/60">Preferisci parlarne direttamente?</p>
         <div className="mt-2 flex flex-col items-start gap-1 text-sm text-sand">
@@ -168,7 +163,7 @@ export function ContactForm({ localPreview = false, enabled, privacyUrl, email, 
           {outcome.reference && <p className="mt-2 break-all text-xs leading-relaxed text-white/60">Riferimento: {outcome.reference}</p>}
         </div>
         <button type="submit" disabled={!enabled || busy || sent || Boolean(retryAt)} className="mt-6 min-h-14 border border-sand px-8 py-4 text-sm uppercase tracking-widest text-sand transition-colors hover:bg-sand hover:text-ink disabled:border-white/25 disabled:text-white/55 disabled:hover:bg-transparent">
-          {busy ? 'Invio in corso…' : sent ? 'Richiesta inviata' : retryAt ? 'Attendi prima di riprovare' : uncertain ? 'Verifica esito' : localPreview ? 'Verifica i campi' : 'Invia richiesta'}
+          {busy ? 'Invio in corso…' : sent ? 'Richiesta inviata' : retryAt ? 'Attendi prima di riprovare' : uncertain ? 'Verifica esito' : 'Invia richiesta'}
         </button>
         <noscript><p className="mt-5 text-sm leading-relaxed text-white/70">Per inviare il modulo attiva JavaScript oppure utilizza i recapiti email e telefono.</p></noscript>
       </form>

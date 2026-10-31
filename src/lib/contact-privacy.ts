@@ -1,7 +1,7 @@
 export const contactPrivacy = {
   title: 'Informativa privacy',
   updated: '29 ottobre 2026',
-  version: '2026-10-29',
+  version: '2026-10-29-hostinger',
   sections: [
     {
       title: 'Titolare del trattamento',
@@ -29,28 +29,29 @@ export const contactPrivacy = {
     {
       title: 'Ricezione delle richieste e fornitori',
       paragraphs: [
-        'Il sito è ospitato da Netlify. Le richieste vengono gestite tramite Netlify Forms e notificate alla casella aziendale events_studiopz@hotmail.com, erogata da Microsoft. Possono accedervi il titolare e le persone autorizzate a gestire contatti e preventivi, oltre ai fornitori nella misura necessaria all’erogazione dei servizi.',
-        'Netlify fornisce hosting, gestione del modulo e protezioni tecniche secondo le condizioni del servizio e il relativo accordo sul trattamento dei dati (DPA). Il servizio di posta Microsoft opera secondo le condizioni e l’informativa applicabili alla casella utilizzata. I dati non vengono pubblicati sul sito.',
+        'Il sito è predisposto per hosting Node.js Hostinger. Le richieste vengono inviate tramite Resend e recapitate alla casella aziendale events_studiopz@hotmail.com, erogata da Microsoft. Possono accedervi il titolare e le persone autorizzate a gestire contatti e preventivi, oltre ai fornitori nella misura necessaria all’erogazione dei servizi.',
+        'Hostinger eroga l’hosting; Resend elabora il contenuto delle email per la consegna. Upstash Redis conserva esclusivamente impronte HMAC e ricevute tecniche per le protezioni antispam e contro duplicati, con scadenza automatica entro 48 ore; non conserva il testo del messaggio o i recapiti in chiaro. I fornitori operano secondo i rispettivi accordi sul trattamento dei dati. Il servizio di posta Microsoft opera secondo le condizioni e l’informativa applicabili alla casella utilizzata. I dati non vengono pubblicati sul sito.',
         'I servizi possono comportare trattamenti anche fuori dallo Spazio economico europeo, inclusi gli Stati Uniti. Le informazioni sui trasferimenti e sulle garanzie adottate dai fornitori, comprese le clausole contrattuali standard e le decisioni di adeguatezza applicabili, sono disponibili nelle rispettive documentazioni. Puoi chiedere al titolare informazioni sulle garanzie pertinenti e come ottenerne copia.',
       ],
       links: [
-        { label: 'Netlify: protezione dei dati e DPA', href: 'https://www.netlify.com/gdpr-ccpa/' },
-        { label: 'Netlify: fornitori e documentazione di sicurezza', href: 'https://www.netlify.com/trust-center/' },
+        { label: 'Hostinger: privacy', href: 'https://www.hostinger.com/legal/privacy-policy' },
+        { label: 'Resend: trattamento dati', href: 'https://resend.com/legal/dpa' },
+        { label: 'Upstash: trattamento dati', href: 'https://upstash.com/trust/dpa' },
         { label: 'Informativa privacy Microsoft', href: 'https://privacy.microsoft.com/it-it/privacystatement' },
       ],
     },
     {
       title: 'Sicurezza e dati tecnici',
       paragraphs: [
-        'Il servizio usa connessioni HTTPS, controlli sui dati inviati, limiti di dimensione e frequenza, un campo antispam e verifiche degli invii ripetuti. Per questi controlli vengono trattati l’indirizzo IP e identificativi tecnici. Nel registro di protezione sono conservate impronte dei dati e dell’indirizzo IP, riferimenti della richiesta e relativi stati, senza il testo del messaggio o l’indirizzo IP in chiaro.',
-        'Gli identificativi di protezione sono destinati alla cancellazione dopo 48 ore tramite una procedura giornaliera, normalmente entro 72 ore dalla creazione. I fornitori possono inoltre trattare log tecnici per erogare e proteggere i propri servizi, secondo le rispettive condizioni e impostazioni di conservazione.',
+        'Il servizio usa connessioni HTTPS, controlli sui dati inviati, limiti di dimensione e frequenza, un campo antispam e verifiche degli invii ripetuti. Il registro di protezione conserva impronte HMAC dei dati e dell’indirizzo email, riferimenti della richiesta e relativi stati, senza messaggi, recapiti o indirizzi IP in chiaro.',
+        'Le ricevute tecniche scadono automaticamente dopo 48 ore; i contatori di frequenza dopo 10 minuti. I fornitori possono inoltre trattare log tecnici per erogare e proteggere i propri servizi, secondo le rispettive condizioni e impostazioni di conservazione.',
         'Il modulo non richiede cookie di marketing né memorizza i dati compilati nell’archivio locale del browser. In caso di errore, i campi restano nella pagina aperta per consentirti di verificarli o ricontattarci. Nessun sistema può garantire l’assenza assoluta di guasti o accessi illeciti.',
       ],
     },
     {
       title: 'Tempi di conservazione',
       paragraphs: [
-        'Le richieste che non danno seguito a un incarico vengono conservate per 12 mesi dall’ultimo contatto, poi eliminate da Netlify e dalla posta aziendale, comprese le copie operative. Il titolare cura la verifica periodica e la cancellazione; il termine non corrisponde a un automatismo della casella email.',
+        'Le richieste che non danno seguito a un incarico vengono conservate per 12 mesi dall’ultimo contatto, poi eliminate dalla posta aziendale e dalle eventuali copie operative presso i fornitori. Il titolare cura la verifica periodica e la cancellazione; il termine non corrisponde a un automatismo della casella email.',
         'Se nasce un incarico, i dati necessari alla sua esecuzione sono trattati per la durata del rapporto e quelli soggetti a obblighi di legge per i relativi termini. Eventuali esigenze documentate di tutela di un diritto possono richiedere la conservazione dei soli dati pertinenti per il tempo necessario.',
       ],
     },

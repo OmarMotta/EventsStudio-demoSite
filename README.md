@@ -1,57 +1,23 @@
 # Events Studio
 
-Sito Next.js App Router, TypeScript e Tailwind CSS, con font locali e hosting Netlify. Il progetto usa pnpm; conservare `pnpm-lock.yaml`.
+Sito Next.js 16 App Router, React 19, TypeScript e Tailwind. Font e media locali.
 
-## Stato attuale — 20 ottobre 2026
+## Avvio locale
 
-Modulo Contattaci con integrazione Netlify Forms, protezioni lato server e test; pagina privacy e cookie policy presenti nel codice. La cookie policy mantiene Google Maps con caricamento automatico su richiesta del proprietario: non implementa una raccolta del consenso e non certifica la conformità di eventuali tracciamenti Google.
+Node.js 22 o 24. `pnpm install --frozen-lockfile`, quindi `npm run dev` (http://127.0.0.1:3000).
+Il lockfile autorevole è pnpm-lock.yaml. Gli script sono eseguibili anche con npm; evitare un secondo lockfile.
+`npm run typecheck`, `npm test`, `npm run build`, `npm start`.
 
-Il sito pubblico esiste già, ma le nuove funzionalità non sono ancora verificate in produzione: le pubblicazioni Netlify sono bloccate dai crediti dell’account. Registrazione reale dei contatti e ricezione delle notifiche email restano da collaudare dopo un deploy riuscito.
+Il sito funziona anche senza credenziali. Per inviare realmente dal modulo copiare .env.example in .env.local e seguire [la guida contatti](docs/CONTATTI-HOSTINGER.md).
+Il backend non simula successi quando i servizi non sono configurati.
 
-## Cartelle e file
+## Struttura
 
-- `src/`: pagine, stile, componenti, dati e backend del modulo.
-- `public/`: logo, fotografie, video effettivamente usati dalla hero e definizione statica per Netlify Forms.
-- `netlify/`: protezione dell’ingresso al modulo e pulizia dei registri tecnici.
-- `tests/`: test del modulo e verifica esplicita in produzione.
-- `docs/`: istruzioni, policy e resoconti delle verifiche.
-- `docs/archivio/`: appunti storici, conservati come riferimento e non come istruzioni attuali.
-- `qa/`: schermate delle verifiche locali, escluse da Git.
-- `netlify.toml`, `next.config.ts`, `tsconfig.json`, `postcss.config.mjs`, `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `next-env.d.ts`: configurazione necessaria.
-- `.env.example`: esempio delle impostazioni; non inserire segreti nei file pubblici o in Git.
-- `AGENTS.md`, `CLAUDE.md`: istruzioni per gli assistenti di sviluppo.
+- src/app: pagine App Router e POST /api/contact.
+- src/components: interfaccia, incluso il modulo contatti esistente.
+- src/lib/contact*: validazione, configurazione server, invio Resend e guardie Redis.
+- public: media pubblici; nessuna definizione Forms o richiesta cliente.
+- tests: unità con mock, sicurezza HTTP locale, collaudo reale esplicito.
+- docs: guida attuale; archivio conserva i vecchi rapporti, non più applicabili.
 
-`node_modules/` contiene le dipendenze installate e `.next/` la compilazione locale. Sono rigenerabili ed esclusi da Git; vengono mantenuti per non interrompere l’anteprima e non richiedere una reinstallazione.
-
-## Guide
-
-- [Sicurezza del sito e configurazioni degli account](docs/SICUREZZA-SITO.md)
-
-- [Modificare il sito](docs/GUIDA-SITO.md)
-- [Leggere e gestire i contatti, anche da mobile](docs/GESTIONE-CONTATTI.md)
-- [Verifiche del modulo e configurazione di produzione](docs/VERIFICHE-CONTATTI.md)
-- [Informativa del modulo](docs/PRIVACY-MODULO.md)
-- [Cookie policy](docs/COOKIE-POLICY.md)
-- [Verifiche cookie e limite della mappa automatica](docs/COOKIE-VERIFICHE.md)
-- [Gallerie](docs/GALLERY.md) e [fotografie inserite](docs/FOTO-INSERITE.md)
-
-## Avvio e verifiche
-
-Con Node.js 22.12+ e pnpm 11.25.0:
-
-```sh
-pnpm install
-pnpm dev
-pnpm typecheck
-pnpm test
-pnpm build
-pnpm start
-```
-
-In questo ambiente locale la compilazione è stata verificata anche con `pnpm exec next build --webpack`. I test di produzione richiedono configurazione esplicita e inviano una richiesta reale: consultare la guida delle verifiche prima di eseguirli.
-
-## Video
-
-La homepage usa `hero-v2-desktop.mp4`, `hero-v2-mobile.mp4` e `hero-v2-poster.webp`. Le cinque versioni precedenti inutilizzate sono state tolte dalla cartella pubblica; rimangono recuperabili dalla cronologia Git. Nessuna compressione o modifica dei video attuali.
-
-La sorgente video dipende dalla larghezza iniziale: ricaricare la pagina dopo aver cambiato la dimensione per confrontare desktop e mobile.
+Nessuna esportazione statica: serve un hosting Next.js con runtime Node.js. Migrazione predisposta per Hostinger Business/Unlimited; nessun deploy o account esterno configurato da questa modifica.

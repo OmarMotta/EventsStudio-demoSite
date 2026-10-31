@@ -1,7 +1,5 @@
 export const eventTypes = ['Feste private', 'Diciottesimi', 'Wedding', 'Eventi aziendali', 'Feste di piazza', 'Spettacoli', 'Tourism'];
-export const CONTACT_FORM_NAME = 'events-studio-contatti';
-export const CONTACT_DEFINITION_PATH = '/__forms.html';
-export const PRIVACY_VERSION = '2026-10-29';
+export const PRIVACY_VERSION = '2026-10-29-hostinger';
 
 export type Inquiry = {
   nome: string; cognome: string; telefono: string; email: string;
@@ -26,7 +24,7 @@ export function validateInquiry(value: unknown): Validation {
     else if ((key === 'messaggio' ? /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/ : /[\u0000-\u001f\u007f]/).test(input)) fields[key] = 'Rimuovi i caratteri non validi.';
     else values[key] = input.trim();
   }
-  if (values.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) fields.email = 'Inserisci un indirizzo email valido.';
+  if (values.email && !isEmail(values.email)) fields.email = 'Inserisci un indirizzo email valido.';
   if (values.telefono && (!/^\+?[\d\s().-]+$/.test(values.telefono) || !/^\d{6,15}$/.test(values.telefono.replace(/\D/g, '')))) fields.telefono = 'Inserisci un numero di telefono valido, anche con prefisso internazionale.';
   if (values.tipologia && !eventTypes.includes(values.tipologia)) fields.tipologia = 'Seleziona una tipologia di evento.';
   const date = raw.data ?? '';
@@ -38,3 +36,5 @@ export function validateInquiry(value: unknown): Validation {
     tipologia: values.tipologia, data: date as string, location: values.location, messaggio: values.messaggio, privacy: true,
   } };
 }
+
+export const isEmail = (value: string) => value.length <= 254 && /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)+$/.test(value);

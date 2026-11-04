@@ -72,3 +72,13 @@ Configurazione privata locale completata con mittente concordato richieste@event
 - Nessun deploy, commit, push o modifica DNS eseguito durante il collaudo. Verifica sul runtime Hostinger ancora necessaria dopo pubblicazione autorizzata.
 
 Conferma del proprietario tramite utente: email di collaudo ricevuta nella cartella posta indesiderata. Consegna in casella confermata; collocamento in posta in arrivo non confermato. Reply-To ancora da verificare con un indirizzo cliente distinto. Da verificare dopo pubblicazione anche il recapito in produzione; nessuna garanzia di esclusione dai filtri antispam.
+
+## Diagnosi recapito — Mail-Tester, 1 novembre 2026
+
+Destinazione di test fornita dall’utente: test-cspbialeb@srv1.mail-tester.com. Invio autorizzato con soli dati fittizi, modello reale contactEmail/deliverContact e mittente richieste@eventsstudio.it; destinatario aziendale in .env.local mantenuto invariato. Questo test diretto del provider non ripete il flusso API/Redis.
+
+- Resend HTTP 200. ID provider: 01a197e0-82ed-777a-b9e5-5c62ca6a83a4.
+- Report letto nel browser: https://mail-tester.com/test-cspbialeb
+- Punteggio: 10/10. SPF_PASS, DKIM_VALID e DKIM_VALID_AU; DMARC superato. Reverse DNS valido e nessuna presenza nelle blocklist controllate dal servizio.
+- HTML 2 KB, versione testuale presente. Nessun errore di autenticazione rilevato nel messaggio ricevuto da Mail-Tester. Non è una certificazione della valutazione o della reputazione presso Microsoft.
+- La classificazione spam nella casella Hotmail è stata riferita dall’utente anche per la seconda prova. La causa specifica resta da identificare tramite intestazioni ricevute da Outlook e/o supporto Resend. Nessuna modifica DNS o di contenuto introdotta senza evidenze.

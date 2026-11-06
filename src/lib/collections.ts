@@ -43,7 +43,7 @@ wedding.images = selected(['p1','p0','p7','p13','p15','p17','p20','p27','p28','p
 wedding.images.splice(3, 0, newPhotos.weddingKiss);
 const privateParties = collections.find(item => item.slug === 'feste-private')!;
 privateParties.cover = photos.p31;
-privateParties.images = selected(['p31','p23','p24','p25']);
+privateParties.images = selected(['p23']);
 const shows = collections.find(item => item.slug === 'spettacoli')!;
 shows.cover = photos.p22;
 shows.images = selected(['p19','p22','p12']);

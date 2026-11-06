@@ -39,7 +39,8 @@ export const routes = ['/', '/chi-siamo', '/servizi', '/contatti', '/party', '/e
 const selected = (keys: (keyof typeof photos)[]): GalleryImage[] => keys.map((key,index) => ({...photos[key], layout: photos[key].height > photos[key].width ? (index % 2 ? 'portrait-left' : 'portrait-right') : 'opening'}));
 const wedding = collections.find(item => item.slug === 'wedding')!;
 wedding.cover = photos.p8;
-wedding.images = selected(['p1','p0','p7','p9','p13','p15','p17','p20','p27','p28','p29','p18','p21','p5']);
+wedding.images = selected(['p1','p0','p7','p13','p15','p17','p20','p27','p28','p29','p18','p21','p5']);
+wedding.images.splice(3, 0, newPhotos.weddingKiss);
 const privateParties = collections.find(item => item.slug === 'feste-private')!;
 privateParties.cover = photos.p31;
 privateParties.images = selected(['p31','p23','p24','p25']);

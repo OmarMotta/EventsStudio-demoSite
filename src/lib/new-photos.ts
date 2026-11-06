@@ -1,6 +1,17 @@
 import type { GalleryImage } from "./gallery";
 
 export const newPhotos: Record<string, GalleryImage> = {
+  "weddingKiss": {
+    "id": "weddingKiss",
+    "title": "Un bacio tra le nuvole",
+    "alt": "Gli sposi si baciano mentre il fumo avvolge la pista da ballo",
+    "src": "/assets/images/events/wedding/bacio-tra-le-nuvole-large.webp",
+    "srcSet": "/assets/images/events/wedding/bacio-tra-le-nuvole-small.webp 720w, /assets/images/events/wedding/bacio-tra-le-nuvole-large.webp 1086w",
+    "width": 1086,
+    "height": 1448,
+    "position": "50% 50%",
+    "layout": "portrait-left"
+  },
   "weddingCake": {
     "id": "weddingCake",
     "title": "Taglio della torta",

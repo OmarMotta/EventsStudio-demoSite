@@ -1,4 +1,4 @@
-import { newPhotos } from "./new-photos";
+import { eighteenthGalleryPhotos, newPhotos } from "./new-photos";
 import { photos } from "./photo-assets";
 import type { GalleryImage } from './gallery';
 
@@ -74,4 +74,4 @@ privateParties.images = [newPhotos.partyDanceOne, newPhotos.partyDanceTwo, ...pr
 const eighteenth = collections.find(item => item.slug === "diciottesimi")!;
 const eighteenthPhoto: GalleryImage = {"id": "diciottesimi-fontane", "title": "Una serata da ricordare", "alt": "La festeggiata tra fontane luminose durante il diciottesimo", "src": "/assets/images/party/diciottesimi/festeggiata-fontane.png", "width": 1440, "height": 960, "position": "50% 50%", "layout": "opening"};
 eighteenth.cover = eighteenthPhoto;
-eighteenth.images = [eighteenthPhoto, ...eighteenth.images.filter(image => image.src)];
+eighteenth.images = [eighteenthPhoto, ...eighteenth.images.filter(image => image.src), ...eighteenthGalleryPhotos];

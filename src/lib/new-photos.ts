@@ -78,3 +78,24 @@ export const newPhotos: Record<string, GalleryImage> = {
     "layout": "opening"
   }
 };
+
+export const eighteenthGalleryPhotos: GalleryImage[] = [
+  { id: 'festeggiato-in-volo', title: 'Il festeggiato in volo', alt: 'Gli amici sollevano il festeggiato sulla pista da ballo' },
+  { id: 'torta-diciottesimo', title: 'La torta dei diciotto anni', alt: 'Il festeggiato davanti alla torta a più piani tra palloncini neri e oro' },
+  { id: 'luci-ed-effetti', title: 'Luci ed effetti', alt: 'Il festeggiato sulla pedana tra luci viola e fumo colorato' },
+  { id: 'ballo-in-coppia', title: 'Un ballo insieme', alt: 'Due ragazzi ballano abbracciati davanti agli invitati' },
+  { id: 'foto-di-gruppo', title: 'La foto di gruppo', alt: 'Gli invitati posano con le mani alzate durante la festa' },
+].map(({ id, title, alt }) => {
+  const imagePath = `/assets/images/party/diciottesimi/${id}`;
+  return {
+    id,
+    title,
+    alt,
+    src: `${imagePath}-2400.webp`,
+    srcSet: `${imagePath}-960.webp 960w, ${imagePath}-2400.webp 2400w`,
+    width: 2400,
+    height: 1600,
+    position: '50% 50%',
+    layout: 'opening',
+  };
+});

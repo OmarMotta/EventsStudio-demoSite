@@ -55,8 +55,9 @@ export function SiteFooter() {
           </div>
           <BrandMark backToTop />
         </div>
-        <div className="flex items-center justify-between gap-6 border-t border-white/10 pt-5 text-xs text-white/55">
+        <div className="flex flex-col gap-3 border-t border-white/10 pt-5 text-xs text-white/55 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-6">
           <span>© Events Studio</span>
+          <span>Sito realizzato da <span className="font-semibold text-white/70">TAP&amp;CONNECT</span></span>
           <a href="#contenuto" className="inline-flex min-h-11 items-center text-white/65 transition-colors hover:text-sand">Torna all’inizio</a>
         </div>
       </Reveal>

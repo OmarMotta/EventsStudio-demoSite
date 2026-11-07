@@ -4,6 +4,14 @@ const config: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   devIndicators: false,
+  async redirects() {
+    return [{
+      source: '/:path*',
+      has: [{ type: 'host', value: 'www\\.eventsstudio\\.it' }],
+      destination: 'https://eventsstudio.it/:path*',
+      permanent: true,
+    }];
+  },
   async headers() {
     // Next's static pages contain inline hydration scripts; retain compatibility
     // without allowing eval in production or loading arbitrary remote scripts.

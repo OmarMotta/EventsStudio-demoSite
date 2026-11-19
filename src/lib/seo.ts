@@ -1,5 +1,25 @@
 import type { Metadata } from 'next';
-// <!-- [PLACEHOLDER: Dominio ufficiale in SITE_URL; attivare SITE_INDEXABLE dopo il completamento dei contenuti] -->
+
+export const homeSearchTitle = 'Matrimoni ed eventi a Potenza';
+
+export const featuredEventPages = {
+  '/events/wedding': {
+    label: 'Matrimoni',
+    title: 'Musica e intrattenimento per matrimoni in Basilicata',
+    description: 'DJ, musica dal vivo e allestimenti per matrimoni a Potenza e in Basilicata. Scopri come accompagnare il ricevimento, il primo ballo e la festa.',
+  },
+  '/events/eventi-aziendali': {
+    label: 'Eventi aziendali',
+    title: 'Organizzazione eventi aziendali a Potenza',
+    description: 'Servizi per convention, congressi, meeting e feste aziendali a Potenza e in Basilicata, con hostess, accoglienza e allestimenti personalizzati.',
+  },
+  '/party/feste-private': {
+    label: 'Feste private',
+    title: 'Feste private a Potenza',
+    description: 'DJ, animazione e allestimenti per feste private a Potenza e in Basilicata. Scopri la gallery e raccontaci come vuoi festeggiare.',
+  },
+} satisfies Record<string, { label: string; title: string; description: string }>;
+
 export function siteOrigin() {
   try { const url = new URL(process.env.SITE_URL ?? ''); return url.protocol === 'https:' ? url.origin : null; } catch { return null; }
 }

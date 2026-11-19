@@ -60,8 +60,7 @@ export function HeroSection() {
     };
   }, [motionAllowed]);
 
-  return <section aria-labelledby="hero-title" className="hero relative isolate overflow-hidden bg-ink">
-    <h1 id="hero-title" className="sr-only">Events Studio — Party, Events, Tourism</h1>
+  return <div className="hero relative isolate overflow-hidden bg-ink">
     {/* Real frame remains visible if autoplay or decoding is unavailable. */}
     <img src={heroMedia.poster} alt="" aria-hidden="true" fetchPriority="high" width={1920} height={1334} className="absolute inset-0 -z-30 size-full object-cover object-center" />
     {/* Remount on media changes: browsers can retain the old resource when only source children change. */}
@@ -70,5 +69,5 @@ export function HeroSection() {
       <source src={heroMedia.video} type="video/mp4" />
     </video>
     <div aria-hidden="true" className="hero-veil absolute inset-0 -z-10" />
-  </section>;
+  </div>;
 }

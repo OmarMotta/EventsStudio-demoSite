@@ -44,6 +44,14 @@ export const officialReviews: OfficialReview[] = [
   }
 ];
 
+export const studioAddress = {
+  streetAddress: "Via Angilla Vecchia, 6",
+  postalCode: "85100",
+  addressLocality: "Potenza",
+  addressRegion: "Basilicata",
+  addressCountry: "IT",
+};
+
 export const officialContent = {
   contactPerson: "Carmine Delle Donne",
   reviewsUrl: "https://www.google.com/maps/place/Events+Studio/@40.6458396,15.797421,17z/data=!3m1!4b1!4m6!3m5!1s0x49edd57705ee34d9:0x7951493e04a1c2b3!8m2!3d40.6458356!4d15.7999959!16s%2Fg%2F11jykb8x9b" as string | null,
@@ -56,7 +64,7 @@ export const officialContent = {
   instagramWedding: "https://www.instagram.com/events_studio_wedding/" as string | null,
   facebook: "https://www.facebook.com/eventstudiopotenza/" as string | null,
   matrimonio: "https://www.matrimonio.com/musica-matrimonio/events-studio-wedding--e360460" as string | null,
-  address: "Via Angilla Vecchia, 6, 85100 Potenza PZ, Italia" as string | null,
+  address: `${studioAddress.streetAddress}, ${studioAddress.postalCode} ${studioAddress.addressLocality} PZ, Italia` as string | null,
   mapsUrl: "https://www.google.com/maps/place/Events+Studio/@40.6458396,15.797421,17z/data=!3m1!4b1!4m6!3m5!1s0x49edd57705ee34d9:0x7951493e04a1c2b3!8m2!3d40.6458356!4d15.7999959!16s%2Fg%2F11jykb8x9b" as string | null,
   mapsEmbedUrl: "https://www.google.com/maps?cid=8741848882417353395&z=17&output=embed" as string | null,
   companyDetails: "P.IVA: 02157470762\nVia Genova, 3 — 85100 Potenza (PZ) — IT\nTelefono: 338 5733403\nevents_studiopz@hotmail.com" as string | null,

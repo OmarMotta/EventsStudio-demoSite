@@ -9,10 +9,10 @@ const album = (): GalleryImage[] => ['opening', 'portrait-left', 'portrait-right
 
 // <!-- [PLACEHOLDER: Foto originali, alt e copertine per ciascuna categoria; testi brevi da approvare] -->
 export const collections: Collection[] = [
-  { slug: 'feste-private', title: 'Feste private', group: 'party', description: 'La tua occasione, il tuo modo di festeggiare.', cover: emptyVisual(), images: album() },
+  { slug: 'feste-private', title: 'Feste private', group: 'party', description: 'DJ, animazione e allestimenti per feste private a Potenza e in Basilicata. Raccontaci che festa hai in mente, dove si terrà e quale atmosfera vuoi creare: ti aiutiamo a scegliere musica e intrattenimento adatti ai tuoi ospiti.', cover: emptyVisual(), images: album() },
   { slug: 'diciottesimi', title: 'Diciottesimi', group: 'party', description: 'Un nuovo capitolo. Una serata da ricordare.', cover: emptyVisual(), images: album() },
-  { slug: 'wedding', title: 'Wedding', group: 'events', description: 'La musica, i dettagli, le emozioni del vostro giorno.', cover: emptyVisual(), images: album() },
-  { slug: 'eventi-aziendali', title: 'Eventi aziendali', group: 'events', description: 'Convention, congressi, meeting e feste aziendali, con servizi di hostess e accoglienza, allestimenti e scenografie personalizzate. Uno spazio per incontrarsi e condividere.', cover: emptyVisual(), images: album() },
+  { slug: 'wedding', title: 'Wedding', group: 'events', description: 'Musica e intrattenimento per matrimoni a Potenza e in Basilicata. Dal ricevimento al primo ballo e alla festa, scegliete con noi DJ, musica dal vivo e allestimenti in base alla location e allo stile delle vostre nozze.', cover: emptyVisual(), images: album() },
+  { slug: 'eventi-aziendali', title: 'Eventi aziendali', group: 'events', description: 'Organizziamo convention, congressi, meeting e feste aziendali a Potenza e in Basilicata. Possiamo occuparci dell’accoglienza con hostess, degli allestimenti e delle scenografie, coordinando questi servizi con la scaletta dell’evento.', cover: emptyVisual(), images: album() },
   { slug: 'feste-di-piazza', title: 'Feste di piazza', group: 'events', description: 'Il palco, la musica, il pubblico. L’energia di un evento collettivo.', cover: emptyVisual(), images: album() },
   { slug: 'spettacoli', title: 'Spettacoli', group: 'events', description: 'Performance, effetti e intrattenimento prendono scena.', cover: emptyVisual(), images: album() },
 ];

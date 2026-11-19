@@ -5,7 +5,7 @@ import { StructuredData } from "@/components/structured-data";
 
 export const metadata: Metadata = {
   ...pageMetadata(homeSearchTitle, 'Events Studio cura musica, intrattenimento e allestimenti per matrimoni, eventi aziendali e feste private a Potenza e in Basilicata.', '/'),
-  icons: { icon: { url: "/assets/logo/events-studio.svg", type: "image/svg+xml" } },
+  icons: { icon: { url: "/favicon.png", type: "image/png", sizes: "96x96" } },
 };
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#080808" };
